@@ -1,0 +1,31 @@
+
+body{
+    background-color: antiquewhite;
+}
+.hero{
+    min-height: calc(100vh-16rem);
+    gap: 10px;
+}
+.hero-content{
+    columns:flex;
+}
+.header1{
+    text-align: center;
+    font-weight: bold;
+    font-size: 32px;
+    padding-bottom: 25px;
+}
+
+.card{
+    width: 29rem;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    margin:auto;
+}
+.card-body{
+    padding:1.5rem;
+    flex: 1 1 auto;  
+}
+
