@@ -1,10 +1,15 @@
 
+
 body{
-    background-color: antiquewhite;
+    margin: 0;
+    background-color: rgb(30, 51, 41);
+    color: aliceblue;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 .hero{
     min-height: calc(100vh-16rem);
     gap: 10px;
+    color: black;
 }
 .hero-content{
     columns:flex;
@@ -24,8 +29,26 @@ body{
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
     margin:auto;
 }
+
 .card-body{
     padding:1.5rem;
     flex: 1 1 auto;  
 }
 
+.navbar{
+    background: white;
+    padding: 12px 14px;
+    line-height: 10px;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    border-bottom: 10px;
+}
+
+.btn{
+    font-size: small;
+    background-color: whitesmoke;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    margin: auto;
+    padding: 10px;
+}

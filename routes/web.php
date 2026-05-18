@@ -1,12 +1,11 @@
 <?php
 
-//use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HelloController;
 use App\Http\Controllers\RegisterController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login');
 });
 
 Route::get('/register/account', [RegisterController::class, 'accountForm']);

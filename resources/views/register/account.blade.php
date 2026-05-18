@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <x:layout>
+<x:layout>
         <x-slot:title>Account Details</x-slot:title>
-</head>
 <body>
 
     <div class="hero">

@@ -7,43 +7,52 @@
     <x-slot:title>Personal Details</x-slot:title>
 </head>
 <body>  
-    <h2>Personal Details</h2>
+    <div class="hero">
+        <div class="hero-content">
+            <div class="card">
+                <div class="card-body">
 
-    @if(session('success'))
-        <p style="color: green;">{{session('success')}}</p>
-    @endif
+                <h2>Personal Details</h2>
 
-    <form action="/register/personal" method="POST">
-        @csrf
-        <h3>Address</h3>
-        <label>City</label>
-        <input type="text" name="city" value="{{old('city')}}"><br><br>
-        
-        <label>Barangay</label>
-        <input type="text" name="barangay" value="{{old('barangay')}}"><br><br>
+                @if(session('success'))
+                    <p style="color: green;">{{session('success')}}</p>
+                @endif
 
-        <label>Street</label>
-        <input type="text" name="street" value="{{old('street')}}"><br><br>
+                <form action="/register/personal" method="POST">
+                    @csrf
+                    <h3>Address</h3>
+                    <label>City</label>
+                    <input type="text" name="city" value="{{old('city')}}"><br><br>
+                    
+                    <label>Barangay</label>
+                    <input type="text" name="barangay" value="{{old('barangay')}}"><br><br>
 
-        <label>House Number</label>
-        <input type="text" name="houseNo" value="{{old('houseNo')}}"><br><br>
+                    <label>Street</label>
+                    <input type="text" name="street" value="{{old('street')}}"><br><br>
 
-        <h3>Other Details</h3>
-        <label>Birthday</label>
-        <input type="date" name="birthday" value="{{old('birthday')}}"><br><br>
+                    <label>House Number</label>
+                    <input type="text" name="houseNo" value="{{old('houseNo')}}"><br><br>
 
-        <label>Sex</label>
-        <select name="sex">
-            <option value="male" {{ old('sex') == 'male' ? 'selected' : '' }}>Male</option>
-            <option value="female" {{old('sex') == 'female' ? 'selected' : '' }}>Female</option>
-        </select> <br><br>
+                    <h3>Other Details</h3>
+                    <label>Birthday</label>
+                    <input type="date" name="birthday" value="{{old('birthday')}}"><br><br>
 
-        <label>Phone Number</label>
-        <input type="tel" name="phone" value="{{old('phone')}}"><br><br>
+                    <label>Sex</label>
+                    <select name="sex">
+                        <option value="male" {{ old('sex') == 'male' ? 'selected' : '' }}>Male</option>
+                        <option value="female" {{old('sex') == 'female' ? 'selected' : '' }}>Female</option>
+                    </select> <br><br>
 
-        <button type="submit">Next</button>
+                    <label>Phone Number</label>
+                    <input type="tel" name="phone" value="{{old('phone')}}"><br><br>
 
-    </form>
+                    <button type="submit">Next</button>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <p>Already have an account? <a href="/login">Login Here</a></p>
 
 </body>

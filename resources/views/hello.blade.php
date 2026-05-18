@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-
-<html>
 <head>
     <title>Hello Page</title>
 </head>
