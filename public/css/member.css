@@ -1,0 +1,520 @@
+/* =========================================
+   PAGE HEADER
+========================================= */
+
+.page-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:30px;
+}
+
+.page-header h2{
+    font-size:32px;
+    font-weight:700;
+    color:#222;
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.btn-primary{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:14px 24px;
+
+    border:none;
+    border-radius:16px;
+
+    background:#67b69e;
+
+    color:white;
+    text-decoration:none;
+
+    font-weight:600;
+    font-size:15px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.btn-primary:hover{
+    background:#5aa08a;
+    transform:translateY(-2px);
+}
+
+.btn-secondary{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:12px 20px;
+
+    border:none;
+    border-radius:14px;
+
+    background:#eef2f7;
+
+    color:#444;
+    text-decoration:none;
+
+    font-weight:500;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.btn-secondary:hover{
+    background:#dde5ef;
+}
+
+/* =========================================
+   ALERTS
+========================================= */
+
+.success-box{
+    background:#dff6e8;
+    color:#267a4d;
+
+    padding:16px 20px;
+
+    border-radius:18px;
+
+    margin-bottom:25px;
+
+    font-weight:500;
+}
+
+.error-box{
+    background:#ffe4e4;
+    color:#b42323;
+
+    padding:16px 20px;
+
+    border-radius:18px;
+
+    margin-bottom:25px;
+}
+
+.error-box ul{
+    list-style:none;
+}
+
+/* =========================================
+   TABLE CARD
+========================================= */
+
+.table-card{
+    background:white;
+
+    border-radius:28px;
+
+    padding:25px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,0.05);
+
+    overflow:hidden;
+}
+
+/* =========================================
+   MEMBER TABLE
+========================================= */
+
+.member-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.member-table thead{
+    background:#f7f9fc;
+}
+
+.member-table thead th{
+    padding:18px;
+
+    text-align:left;
+
+    font-size:14px;
+    font-weight:600;
+
+    color:#666;
+
+    text-transform:uppercase;
+    letter-spacing:.5px;
+}
+
+.member-table tbody tr{
+    transition:.3s;
+    border-bottom:1px solid #f0f0f0;
+}
+
+.member-table tbody tr:hover{
+    background:#f8fbff;
+}
+
+.member-table tbody td{
+    padding:20px 18px;
+    vertical-align:middle;
+}
+
+/* =========================================
+   MEMBER PROFILE CELL
+========================================= */
+
+.member-info{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.member-avatar{
+    width:48px;
+    height:48px;
+
+    border-radius:50%;
+
+    background:#67b69e;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:white;
+    font-weight:700;
+    font-size:16px;
+}
+
+.member-name{
+    font-weight:600;
+    color:#222;
+}
+
+.member-email{
+    font-size:14px;
+    color:#222;
+    margin-top:4px;
+}
+
+/* =========================================
+   STATUS BADGES
+========================================= */
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    font-size:13px;
+    font-weight:600;
+}
+
+.badge-active{
+    background:#dff6e8;
+    color:#267a4d;
+}
+
+.badge-inactive{
+    background:#f3f3f3;
+    color:#777;
+}
+
+.badge-visitor{
+    background:#e8f0ff;
+    color:#2a5db0;
+}
+
+.badge-volunteer{
+    background:#fff2d9;
+    color:#c18b00;
+}
+
+/* =========================================
+   ACTION BUTTONS
+========================================= */
+
+.actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.action-btn{
+    border:none;
+
+    padding:10px 14px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    text-decoration:none;
+
+    font-size:14px;
+    font-weight:500;
+
+    transition:.3s;
+}
+
+.view-btn{
+    background:#eef4ff;
+    color:#2a5db0;
+}
+
+.view-btn:hover{
+    background:#dce8ff;
+}
+
+.edit-btn{
+    background:#eef8f4;
+    color:#267a4d;
+}
+
+.edit-btn:hover{
+    background:#d7efe5;
+}
+
+.delete-btn{
+    background:#ffe8e8;
+    color:#c62828;
+}
+
+.delete-btn:hover{
+    background:#ffd5d5;
+}
+
+/* =========================================
+   FORM CARD
+========================================= */
+
+.form-card{
+    background:white;
+
+    border-radius:30px;
+
+    padding:40px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,0.05);
+
+    max-width:1000px;
+}
+
+/* =========================================
+   FORM GRID
+========================================= */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:25px;
+}
+
+.full-width{
+    grid-column:1 / -1;
+}
+
+/* =========================================
+   FORM GROUP
+========================================= */
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group label{
+    margin-bottom:10px;
+
+    font-weight:600;
+    color:#444;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+    width:100%;
+
+    padding:15px 18px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:#f3f5f9;
+
+    font-size:15px;
+
+    transition:.3s;
+}
+
+.form-group textarea{
+    min-height:120px;
+    resize:vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+    outline:none;
+
+    background:white;
+
+    border:2px solid #67b69e;
+}
+
+/* =========================================
+   PROFILE CARD
+========================================= */
+
+.profile-card{
+    background:white;
+
+    border-radius:30px;
+
+    padding:40px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,0.05);
+
+    max-width:900px;
+}
+
+.profile-header{
+    display:flex;
+    align-items:center;
+    gap:25px;
+
+    margin-bottom:35px;
+}
+
+.profile-avatar{
+    width:100px;
+    height:100px;
+
+    border-radius:50%;
+
+    background:#67b69e;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:white;
+
+    font-size:32px;
+    font-weight:700;
+}
+
+.profile-name{
+    font-size:34px;
+    font-weight:700;
+}
+
+.profile-role{
+    color:#777;
+    margin-top:5px;
+}
+
+/* =========================================
+   PROFILE GRID
+========================================= */
+
+.profile-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:25px;
+}
+
+.profile-item{
+    background:#f7f9fc;
+
+    padding:22px;
+
+    border-radius:20px;
+}
+
+.profile-item label{
+    display:block;
+
+    font-size:13px;
+    font-weight:600;
+
+    color:#888;
+
+    text-transform:uppercase;
+
+    margin-bottom:8px;
+}
+
+.profile-item p{
+    font-size:17px;
+    font-weight:500;
+}
+
+/* =========================================
+   PAGINATION
+========================================= */
+
+.pagination{
+    margin-top:30px;
+
+    display:flex;
+    justify-content:center;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media(max-width:900px){
+
+    .form-grid,
+    .profile-grid{
+        grid-template-columns:1fr;
+    }
+
+    .page-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:20px;
+    }
+
+    .actions{
+        flex-wrap:wrap;
+    }
+
+}
+
+@media(max-width:768px){
+
+    .table-card{
+        overflow-x:auto;
+    }
+
+    .member-table{
+        min-width:900px;
+    }
+
+    .form-card,
+    .profile-card{
+        padding:25px;
+    }
+
+    .profile-header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .profile-name{
+        font-size:28px;
+    }
+
+}

@@ -7,77 +7,128 @@ use App\Models\User;
 
 class RegisterController extends Controller
 {
-    //Step 1 Account Details
-    public function accountForm(){
-        return view('register.account');
+    /*
+    |--------------------------------------------------------------------------
+    | STEP 1 - ACCOUNT
+    |--------------------------------------------------------------------------
+    */
+
+    public function accountForm()
+    {
+        return view('auth.register.account');
     }
 
-    public function saveAccount(Request $request){
+    public function saveAccount(Request $request)
+    {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|confirmed',
+            'name' => ['required', 'max:255'],
+            'email' => ['required', 'email', 'unique:users,email'],
+            'password' => ['required', 'min:8', 'confirmed'],
         ]);
 
-        session([
-            'register.name' => $request->name,
-            'register.email' => $request->email,
-            'register.password' => bcrypt($request->password),
-        ]);
+        $registerData = session('register', []);
+
+        $registerData['name'] = $request->name;
+        $registerData['email'] = $request->email;
+        $registerData['password'] = bcrypt($request->password);
+
+        session(['register' => $registerData]);
 
         return redirect('/register/personal');
     }
-    //Step 2 Personal Details
-    public function personalForm(){
-        return view('register.personal');
+
+    /*
+    |--------------------------------------------------------------------------
+    | STEP 2 - PERSONAL
+    |--------------------------------------------------------------------------
+    */
+
+    public function personalForm()
+    {
+        if (!session('register.name')) {
+            return redirect('/register/account');
+        }
+        return view('auth.register.personal');
     }
 
-    public function savePersonal(Request $request){
+    public function savePersonal(Request $request)
+    {
         $request->validate([
-            'city' => 'required',
-            'barangay' => 'required',
-            'street' => 'nullable',
-            'houseNo' => 'nullable',
-            'birthday' => 'required',
-            'sex'=> 'required',
-            'phone' => 'nullable',
+            'city' => ['required'],
+            'barangay' => ['required'],
+            'street' => ['nullable'],
+            'houseNo' => ['nullable'],
+            'birthday' => ['required', 'date'],
+            'sex' => ['required'],
+            'phone' => ['nullable'],
         ]);
-        session([
-            'register.city' => $request->city,
-            'register.barangay' => $request->barangay,
-            'register.street'=> $request->street,
-            'regiter.houseNo'=>$request->houseNo,
-            'register.birthday'=>$request->birthday,
-            'register.sex'=>$request->sex,
-            'register.phone' => $request->phone,
-        ]);
+
+        $registerData = session('register', []);
+
+        $registerData['city'] = $request->city;
+        $registerData['barangay'] = $request->barangay;
+        $registerData['street'] = $request->street;
+        $registerData['houseNo'] = $request->houseNo;
+        $registerData['birthday'] = $request->birthday;
+        $registerData['sex'] = $request->sex;
+        $registerData['phone'] = $request->phone;
+
+        session(['register' => $registerData]);
 
         return redirect('/register/review');
     }
 
-    public function review(){
+    /*
+    |--------------------------------------------------------------------------
+    | STEP 3 - REVIEW
+    |--------------------------------------------------------------------------
+    */
+
+    public function review()
+    {
         $data = session('register');
-        return view('register.review', compact('data'));
+
+        if (!$data) {
+            return redirect('/register/account');
+        }
+
+        if (!session('register.name')) {
+            return redirect('/register/account');
+        }
+
+        return view('auth.register.review', compact('data'));
     }
 
-    public function submit(){
+    /*
+    |--------------------------------------------------------------------------
+    | FINAL SUBMIT
+    |--------------------------------------------------------------------------
+    */
+
+    public function submit()
+    {
         $data = session('register');
+
+        if (!$data) {
+            return redirect('/register/account');
+        }
 
         User::create([
             'name' => $data['name'],
-            'email'=> $data['email'],
-            'password'=>$data['password'],
-            'city'=>$data['city'],
-            'barangay'=>$data['barangay'],
-            'street'=>$data['street'],
-            'houseNo'=>$data['houseNo'] ?? '',
-            'birthday'=>$data['birthday'] ?? '',
-            'sex'=>$data['sex'] ?? '',
-            'phone'=>$data['phone'] ?? '',
+            'email' => $data['email'],
+            'password' => $data['password'],
+            'city' => $data['city'],
+            'barangay' => $data['barangay'],
+            'street' => $data['street'],
+            'houseNo' => $data['houseNo'] ?? '',
+            'birthday' => $data['birthday'] ?? '',
+            'sex' => $data['sex'] ?? '',
+            'phone' => $data['phone'] ?? '',
         ]);
 
         session()->forget('register');
 
-        return redirect('/login')->with('success', 'Account created successfully!');
+        return redirect('/login')
+            ->with('success', 'Account created successfully!');
     }
 }
