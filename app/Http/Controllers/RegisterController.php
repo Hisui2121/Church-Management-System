@@ -20,21 +20,25 @@ class RegisterController extends Controller
 
     public function saveAccount(Request $request)
     {
+        // In-align natin sa UI input names (first_name, last_name)
         $request->validate([
-            'name' => ['required', 'max:255'],
-            'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'min:8', 'confirmed'],
+            'first_name' => 'required|string|max:255',
+            'last_name'  => 'required|string|max:255',
+            'email'      => 'required|email|unique:users,email',
+            'password'   => 'required|min:8|confirmed',
         ]);
 
-        $registerData = session('register', []);
+        // Pagsasamahin natin ang First at Last Name para maging "name" sa Users table
+        $fullName = $request->first_name . ' ' . $request->last_name;
 
-        $registerData['name'] = $request->name;
-        $registerData['email'] = $request->email;
-        $registerData['password'] = bcrypt($request->password);
+        session([
+            'register.name'     => $fullName,
+            'register.email'    => $request->email,
+            'register.password' => bcrypt($request->password),
+        ]);
 
-        session(['register' => $registerData]);
-
-        return redirect('/register/personal');
+        // Gagamit tayo ng Named Route para sa lipat-pahina (Best Practice)
+        return redirect()->route('register.personal');
     }
 
     /*
@@ -75,7 +79,7 @@ class RegisterController extends Controller
 
         session(['register' => $registerData]);
 
-        return redirect('/register/review');
+        return redirect()->route('register.review');
     }
 
     /*
@@ -126,6 +130,7 @@ class RegisterController extends Controller
             'phone' => $data['phone'] ?? '',
         ]);
 
+        // Burahin ang registration session cache dahil save na sa DB
         session()->forget('register');
 
         return redirect('/login')

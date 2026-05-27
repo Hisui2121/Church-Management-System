@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
         {{ isset($title) ? $title . ' - ChurchMS' : 'ChurchMS' }}
@@ -19,6 +16,8 @@
         href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700"
         rel="stylesheet"
     >
+
+    <script src="https://cdn.tailwindcss.com"></script>
 
     {{-- CSS --}}
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -40,7 +39,9 @@
             <div class="sidebar-top">
 
                 <div class="logo">
-                    ⛪
+                    <span class="logo-text">
+                        he
+                    </span>
                 </div>
 
                 <nav class="sidebar-menu">
