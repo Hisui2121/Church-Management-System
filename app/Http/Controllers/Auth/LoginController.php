@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,6 +27,13 @@ class LoginController extends Controller
 
             $request->session()->regenerate();
 
+            AuditLog::record(
+                action:         'login',
+                tableName:      'users',
+                recordId:       Auth::id(),
+                description:    'User logged in: ' . Auth::user()->name 
+            );
+
             return redirect()->route('dashboard')
                 ->with('success', 'Welcome back!');
         }
@@ -38,6 +46,13 @@ class LoginController extends Controller
     // Logout User
     public function destroy(Request $request)
     {
+        AuditLog::record(
+            action:         'logout',
+            tableName:      'users',
+            recordId:       Auth::id(),
+            description:    'User logged out: ' . Auth::user()->name
+        );
+        
         Auth::logout();
 
         $request->session()->invalidate();

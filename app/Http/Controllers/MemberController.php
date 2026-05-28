@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Member;
+use App\Models\AuditLog;
 
 class MemberController extends Controller
 {
@@ -32,27 +33,34 @@ class MemberController extends Controller
     {
         $validated = $request->validate([
 
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
+            'first_name'        => 'required|max:255',
+            'last_name'         => 'required|max:255',
 
-            'birthdate' => 'nullable|date',
+            'birthdate'         => 'nullable|date',
 
-            'gender' => 'nullable',
+            'gender'            => 'nullable',
 
-            'contact_number' => 'nullable|max:255',
+            'contact_number'    => 'nullable|max:255',
 
-            'email' => 'nullable|email',
+            'email'             => 'nullable|email',
 
-            'address' => 'nullable',
+            'address'           => 'nullable',
 
-            'member_status' => 'required',
+            'member_status'     => 'required',
 
-            'member_type' => 'required',
+            'member_type'       => 'required',
 
-            'date_joined' => 'nullable|date',
+            'date_joined'       => 'nullable|date',
         ]);
 
-        Member::create($validated);
+        $member = Member::create($validated);
+
+        AuditLog::record(
+            action:         'created',
+            tableName:      'members',
+            recordId:       $member->id,
+            description:    "Created member: {$member->first_name} {$member->last_name}"
+        );
 
         return redirect()
             ->route('members.index')
@@ -82,27 +90,34 @@ class MemberController extends Controller
     {
         $validated = $request->validate([
 
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
+            'first_name'        => 'required|max:255',
+            'last_name'         => 'required|max:255',
 
-            'birthdate' => 'nullable|date',
+            'birthdate'         => 'nullable|date',
 
-            'gender' => 'nullable',
+            'gender'            => 'nullable',
 
-            'contact_number' => 'nullable|max:255',
+            'contact_number'    => 'nullable|max:255',
 
-            'email' => 'nullable|email',
+            'email'             => 'nullable|email',
 
-            'address' => 'nullable',
+            'address'           => 'nullable',
 
-            'member_status' => 'required',
+            'member_status'     => 'required',
 
-            'member_type' => 'required',
+            'member_type'       => 'required',
 
-            'date_joined' => 'nullable|date',
+            'date_joined'       => 'nullable|date',
         ]);
 
         $member->update($validated);
+
+        AuditLog::record(
+            action:         'updated',
+            tableName:      'members',
+            recordId:       $member->id,
+            description:    "Updated member: {$member->first_name} {$member->last_name}"
+        );
 
         return redirect()
             ->route('members.index')
@@ -114,7 +129,16 @@ class MemberController extends Controller
      */
     public function destroy(Member $member)
     {
+        $fullName = "{$member->first_name} {$member->last_name}";
+        $memberId = $member->id;
         $member->delete();
+
+        AuditLog::record(
+            action:       'deleted',
+            tableName:    'members',
+            recordId:     $memberId,
+            description:  "Deleted member: {$fullName}"
+        );
 
         return redirect()
             ->route('members.index')

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\AuditLog;
 
 class RegisterController extends Controller
 {
@@ -58,24 +59,24 @@ class RegisterController extends Controller
     public function savePersonal(Request $request)
     {
         $request->validate([
-            'city' => ['required'],
-            'barangay' => ['required'],
-            'street' => ['nullable'],
-            'houseNo' => ['nullable'],
-            'birthday' => ['required', 'date'],
-            'sex' => ['required'],
-            'phone' => ['nullable'],
+            'city'      => ['required'],
+            'barangay'  => ['required'],
+            'street'    => ['nullable'],
+            'houseNo'   => ['nullable'],
+            'birthday'  => ['required', 'date'],
+            'sex'       => ['required'],
+            'phone'     => ['nullable'],
         ]);
 
         $registerData = session('register', []);
 
-        $registerData['city'] = $request->city;
-        $registerData['barangay'] = $request->barangay;
-        $registerData['street'] = $request->street;
-        $registerData['houseNo'] = $request->houseNo;
-        $registerData['birthday'] = $request->birthday;
-        $registerData['sex'] = $request->sex;
-        $registerData['phone'] = $request->phone;
+        $registerData['city']       = $request->city;
+        $registerData['barangay']   = $request->barangay;
+        $registerData['street']     = $request->street;
+        $registerData['houseNo']    = $request->houseNo;
+        $registerData['birthday']   = $request->birthday;
+        $registerData['sex']        = $request->sex;
+        $registerData['phone']      = $request->phone;
 
         session(['register' => $registerData]);
 
@@ -117,18 +118,25 @@ class RegisterController extends Controller
             return redirect('/register/account');
         }
 
-        User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => $data['password'],
-            'city' => $data['city'],
-            'barangay' => $data['barangay'],
-            'street' => $data['street'],
-            'houseNo' => $data['houseNo'] ?? '',
-            'birthday' => $data['birthday'] ?? '',
-            'sex' => $data['sex'] ?? '',
-            'phone' => $data['phone'] ?? '',
+        $user = User::create([
+            'name'      => $data['name'],
+            'email'     => $data['email'],
+            'password'  => $data['password'],
+            'city'      => $data['city'],
+            'barangay'  => $data['barangay'],
+            'street'    => $data['street'],
+            'houseNo'   => $data['houseNo'] ?? '',
+            'birthday'  => $data['birthday'] ?? '',
+            'sex'       => $data['sex'] ?? '',
+            'phone'     => $data['phone'] ?? '',
         ]);
+
+        AuditLog::record(
+            action:         'registered',
+            tableName:      'users',
+            recordId:       $user->id,
+            description:    "New user registered: {$user->name}"
+        );
 
         // Burahin ang registration session cache dahil save na sa DB
         session()->forget('register');

@@ -6,6 +6,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\AuditLogController;
 
 Route::redirect('/', '/login');
 
@@ -50,4 +51,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/member', [MemberController::class, 'index'])
         ->name('member.index');
 
+});
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit_logs.index');
+    Route::get('/audit-logs/{auditLog}', [AuditLogController::class, 'show'])->name('audit_logs.show');
 });

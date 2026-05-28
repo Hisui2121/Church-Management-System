@@ -100,6 +100,14 @@
                         <span>Settings</span>
                     </a>
 
+                    <a
+                        href="{{ route('audit_logs.index') }}"
+                        class="{{ request()->is('audit_logs*') ? 'active' : '' }}"
+                    >
+                        <i class="bi bi-journal-text"></i>
+                        <span>Audit Trail</span>
+                    </a>
+
                 </nav>
 
             </div>
