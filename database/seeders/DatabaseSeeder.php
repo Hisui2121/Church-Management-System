@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             ChurchManagementSeeder::class,
+            AdminSeeder::class,
         ]);
     }
 }

@@ -100,6 +100,16 @@
                         <span>Settings</span>
                     </a>
 
+                    @if (auth()->user()->isAdmin())
+                    <a
+                        href="{{ route('admin.member-statuses.index') }}"
+                        class="{{ request()->is('admin/member-statuses*') ? 'active' : '' }}"
+                    >
+                        <i class="bi bi-shield-lock-fill"></i>
+                        <span>Member Status</span>
+                    </a>
+                    @endif
+
                     <a
                         href="{{ route('audit_logs.index') }}"
                         class="{{ request()->is('audit_logs*') ? 'active' : '' }}"

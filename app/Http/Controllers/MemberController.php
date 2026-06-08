@@ -13,8 +13,9 @@ class MemberController extends Controller
      */
     public function index()
     {
-        $members = Member::latest()->paginate(10);
+        $this->authorize('viewAny', Member::class);
 
+        $members = Member::latest()->paginate(10);
         return view('member.index', compact('members'));
     }
 
@@ -23,6 +24,8 @@ class MemberController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Member::class);
+
         return view('member.create');
     }
 
@@ -31,25 +34,19 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Member::class);
+
         $validated = $request->validate([
 
             'first_name'        => 'required|max:255',
             'last_name'         => 'required|max:255',
-
             'birthdate'         => 'nullable|date',
-
             'gender'            => 'nullable',
-
             'contact_number'    => 'nullable|max:255',
-
             'email'             => 'nullable|email',
-
             'address'           => 'nullable',
-
-            'member_status'     => 'required',
-
-            'member_type'       => 'required',
-
+            'member_status_id'  => 'required|exists:member_statuses,id',
+            'member_type_id'    => 'required|exists:member_types,id',
             'date_joined'       => 'nullable|date',
         ]);
 
@@ -72,6 +69,8 @@ class MemberController extends Controller
      */
     public function show(Member $member)
     {
+        $this->authorize('update', $member);
+
         return view('member.show', compact('member'));
     }
 
@@ -80,6 +79,8 @@ class MemberController extends Controller
      */
     public function edit(Member $member)
     {
+        $this->authorize('update', $member);
+
         return view('member.edit', compact('member'));
     }
 
@@ -88,25 +89,19 @@ class MemberController extends Controller
      */
     public function update(Request $request, Member $member)
     {
+        $this->authorize('update', $member);
+
         $validated = $request->validate([
 
             'first_name'        => 'required|max:255',
             'last_name'         => 'required|max:255',
-
             'birthdate'         => 'nullable|date',
-
             'gender'            => 'nullable',
-
             'contact_number'    => 'nullable|max:255',
-
             'email'             => 'nullable|email',
-
             'address'           => 'nullable',
-
-            'member_status'     => 'required',
-
-            'member_type'       => 'required',
-
+            'member_status_id'  => 'required|exists:member_statuses,id',
+            'member_type_id'    => 'required|exists:member_types,id',
             'date_joined'       => 'nullable|date',
         ]);
 
@@ -129,6 +124,8 @@ class MemberController extends Controller
      */
     public function destroy(Member $member)
     {
+        $this->authorize('delete', $member);
+
         $fullName = "{$member->first_name} {$member->last_name}";
         $memberId = $member->id;
         $member->delete();

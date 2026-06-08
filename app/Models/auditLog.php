@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class auditLog extends Model
+class AuditLog extends Model
 {
     protected $fillable = [
         'user_id',

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AuditLog;
 use Illuminate\Http\Request;
 
-class auditLogController extends Controller
+class AuditLogController extends Controller
 {
     // Display audit log list
 
