@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            AdminAndMemberSeeder::class,
+            ChurchManagementSeeder::class,
         ]);
     }
 }

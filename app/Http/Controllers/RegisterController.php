@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\AuditLog;
+use Carbon\Carbon;
 
 class RegisterController extends Controller
 {
@@ -80,12 +81,46 @@ class RegisterController extends Controller
 
         session(['register' => $registerData]);
 
+        return redirect()->route('register.church');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | STEP 3 - CHURCH FORMS
+    |--------------------------------------------------------------------------
+    */
+
+    public function churchForm()
+    {
+        if (!session('register.name')) {
+            return redirect('/register/account');
+        }
+        return view('auth.register.church');
+    }
+
+    public function saveChurch(Request $request)
+    {
+        $request->validate([
+            'member_type'       => ['required'],
+            'baptism_status'    => ['required'],
+            'baptism_date'      => ['nullable', 'date'],
+            'ministry_interest' => ['required'],
+        ]);
+
+        $registerData = session('register', []);
+        $registerData['member_type']        = $request->member_type;
+        $registerData['baptism_status']     = $request->baptism_status;
+        $registerData['baptism_date']       = $request->baptism_date;
+        $registerData['ministry_interest']  = $request->ministry_interest;
+
+        session(['register' => $registerData]);
+
         return redirect()->route('register.review');
     }
 
     /*
     |--------------------------------------------------------------------------
-    | STEP 3 - REVIEW
+    | STEP 4 - REVIEW
     |--------------------------------------------------------------------------
     */
 
@@ -119,16 +154,22 @@ class RegisterController extends Controller
         }
 
         $user = User::create([
-            'name'      => $data['name'],
-            'email'     => $data['email'],
-            'password'  => $data['password'],
-            'city'      => $data['city'],
-            'barangay'  => $data['barangay'],
-            'street'    => $data['street'],
-            'houseNo'   => $data['houseNo'] ?? '',
-            'birthday'  => $data['birthday'] ?? '',
-            'sex'       => $data['sex'] ?? '',
-            'phone'     => $data['phone'] ?? '',
+            'name'               => $data['name'],
+            'email'              => $data['email'],
+            'password'           => $data['password'],
+            'city'               => $data['city'],
+            'barangay'           => $data['barangay'],
+            'street'             => $data['street'],
+            'houseNo'            => $data['houseNo']           ?? null,
+            'birthday'           => !empty($data['birthday'])
+                                        ? Carbon::parse($data['birthday'])->format('Y-m-d') : null,
+            'sex'                => $data['sex']               ?? null,
+            'phone'              => $data['phone']             ?? null,
+            'member_type'        => $data['member_type']       ?? null,
+            'baptism_status'     => $data['baptism_status']    ?? null,
+            'baptism_date'       => !empty($data['baptism_date'])
+                                        ? Carbon::parse($data['baptism_date'])->format('Y-m-d') : null,
+            'ministry_interest'  => $data['ministry_interest'] ?? null,
         ]);
 
         AuditLog::record(

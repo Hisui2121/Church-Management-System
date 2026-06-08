@@ -85,7 +85,7 @@
                         </div>
                         <div class="flex-1">
                             <label class="block text-xs font-bold text-gray-800 mb-1.5">Date of Baptism</label>
-                            <input type="text" name="baptism_date" placeholder="mm/dd/yy" class="w-full bg-[#f3f4f6] text-[13px] text-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-1 focus:ring-[#468770] border-none">
+                            <input type="date" name="baptism_date" class="w-full bg-[#f3f4f6] text-[13px] text-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-1 focus:ring-[#468770] border-none">
                         </div>
                     </div>
                 </div>
