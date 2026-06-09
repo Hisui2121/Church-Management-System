@@ -123,6 +123,13 @@
                     @endif
 
                     @if (auth()->user()->isAdmin())
+                    <a href="{{ route('admin.users.index') }}" class="menu-item {{ request()->is('admin/users*') ? 'active' : '' }}" title="System Users">
+                        <i class="bi bi-people-fill"></i>
+                        <span class="menu-text">System Users</span>
+                    </a>
+                    @endif
+
+                    @if (auth()->user()->isAdmin())
                     <a href="{{ route('admin.member-statuses.index') }}" class="menu-item {{ request()->is('admin/member-statuses*') ? 'active' : '' }}" title="Member Statuses">
                         <i class="bi bi-shield-check-fill"></i>
                         <span class="menu-text">Roles & Permission</span>

@@ -10,6 +10,7 @@ use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\Admin\MemberStatusController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\MembersController as AdminMembersController;
+use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\MinistriesController;
 use App\Http\Controllers\Admin\EventsController;
 use App\Http\Controllers\Admin\AnnouncementsController;
@@ -80,6 +81,17 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/members/{id}/edit', [AdminMembersController::class, 'edit'])->name('members.edit');
     Route::put('/members/{id}', [AdminMembersController::class, 'update'])->name('members.update');
     Route::delete('/members/{id}', [AdminMembersController::class, 'destroy'])->name('members.destroy');
+
+    // Admin Users
+    Route::get('/users', [UsersController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
+    Route::post('/users', [UsersController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}', [UsersController::class, 'show'])->name('users.show');
+    Route::get('/users/{user}/edit', [UsersController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UsersController::class, 'update'])->name('users.update');
+    Route::get('/users/{user}/change-password', [UsersController::class, 'changePassword'])->name('users.changePassword');
+    Route::put('/users/{user}/change-password', [UsersController::class, 'updatePassword'])->name('users.updatePassword');
+    Route::delete('/users/{user}', [UsersController::class, 'destroy'])->name('users.destroy');
 
     // Admin Ministries
     Route::get('/ministries', [MinistriesController::class, 'index'])->name('ministries.index');
