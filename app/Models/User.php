@@ -35,6 +35,7 @@ class User extends Authenticatable
         'member_id',
         'role_id',
         'member_status_id',
+        'permissions',
     ];
 
     /**
@@ -57,6 +58,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'permissions' => 'array',
         ];
     }
 
@@ -104,7 +106,7 @@ class User extends Authenticatable
 
     /**
      * Admins always have every permission.
-     * Everyone inherits from their MemberStatus permissions JSON.
+     * Everyone else receives permissions assigned directly to their user account.
      */
     public function hasPermission(string $permission): bool
     {
@@ -112,14 +114,14 @@ class User extends Authenticatable
             return true;
         }
 
-        $permissions = $this->memberStatus?->permissions ?? [];
+        $permissions = $this->permissions ?? [];
 
         return in_array($permission, $permissions);
     }
 
     public function can($ability, $arguments = []): bool
     {
-        // Delegate to Laravel Gate Policies first, then fall back to the permission string stored on member status.
+        // Delegate to Laravel Gate Policies first, then fall back to the permission string stored on the user.
         if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->has($ability)) {
             return parent::can($ability, $arguments);
         }

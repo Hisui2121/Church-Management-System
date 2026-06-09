@@ -7,7 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\AuditLogController;
-use App\Http\Controllers\Admin\MemberStatusController;
+use App\Http\Controllers\Admin\UserPermissionController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\MembersController as AdminMembersController;
 use App\Http\Controllers\Admin\UsersController;
@@ -131,8 +131,9 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     // Admin Orders
     Route::get('/orders', [OrdersController::class, 'index'])->name('orders.index');
 
-    // Member Status permissions management
-    Route::get('/member-statuses',                     [MemberStatusController::class, 'index'])->name('member-statuses.index');
-    Route::get('/member-statuses/{memberStatus}/edit', [MemberStatusController::class, 'edit'])->name('member-statuses.edit');
-    Route::put('/member-statuses/{memberStatus}',      [MemberStatusController::class, 'update'])->name('member-statuses.update');
+    // User permissions management
+    Route::get('/permissions',             [UserPermissionController::class, 'index'])->name('permissions.index');
+    Route::get('/permissions/{user}/edit', [UserPermissionController::class, 'edit'])->name('permissions.edit');
+    Route::put('/permissions/{user}',      [UserPermissionController::class, 'update'])->name('permissions.update');
+
 });

@@ -1,28 +1,28 @@
 <x-admin-layout>
 
 <x-slot:title>
-    Edit Permissions — {{ $memberStatus->name }}
+    Edit Permissions - {{ $user->name }}
 </x-slot:title>
 
 <div class="roles-edit-page">
 
     <div class="page-header">
         <h1 class="page-title">Edit Permissions</h1>
-        <p class="page-subtitle">{{ $memberStatus->name }}</p>
+        <p class="page-subtitle">{{ $user->name }} &lt;{{ $user->email }}&gt;</p>
     </div>
 
     <div class="permissions-card">
 
-        <form method="POST" action="{{ route('admin.member-statuses.update', $memberStatus) }}" class="permissions-form">
+        <form method="POST" action="{{ route('admin.permissions.update', $user) }}" class="permissions-form">
             @csrf
             @method('PUT')
 
             <p class="form-description">
-                Check the actions that users with <strong>{{ $memberStatus->name }}</strong> status are allowed to perform.
-                Admins always have full access regardless of this setting.
+                Check the actions this user account is allowed to perform.
+                Admins always have full access regardless of these settings.
             </p>
 
-            @php $current = $memberStatus->permissions ?? []; @endphp
+            @php $current = $user->permissions ?? []; @endphp
 
             <div class="permissions-list">
                 @foreach($available as $key => $label)
@@ -31,7 +31,8 @@
                             type="checkbox"
                             name="permissions[]"
                             value="{{ $key }}"
-                            {{ in_array($key, $current) ? 'checked' : '' }}
+                            {{ $user->isAdmin() || in_array($key, $current) ? 'checked' : '' }}
+                            {{ $user->isAdmin() ? 'disabled' : '' }}
                             class="permission-checkbox"
                         >
                         <div class="permission-content">
@@ -43,10 +44,10 @@
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary" {{ $user->isAdmin() ? 'disabled' : '' }}>
                     <i class="bi bi-check"></i> Save Permissions
                 </button>
-                <a href="{{ route('admin.member-statuses.index') }}" class="btn btn-secondary">
+                <a href="{{ route('admin.permissions.index') }}" class="btn btn-secondary">
                     <i class="bi bi-x"></i> Cancel
                 </a>
             </div>
@@ -160,6 +161,11 @@
         text-decoration: none;
         cursor: pointer;
         transition: all 0.2s ease;
+    }
+
+    .btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
     }
 
     .btn-primary {

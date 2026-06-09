@@ -29,20 +29,23 @@ class UsersController extends Controller
     public function create(): View
     {
         $roles = Role::all();
+        $statuses = MemberStatus::all();
         
         return view('admin.users.create', [
             'title' => 'Create User',
             'roles' => $roles,
+            'statuses' => $statuses,
         ]);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'role_id' => 'required|exists:roles,id',
+            'name'              => 'required|string|max:255',
+            'email'             => 'required|string|email|max:255|unique:users',
+            'password'          => 'required|string|min:8|confirmed',
+            'role_id'           => 'required|exists:roles,id',
+            'member_status_id'  => 'nullable|exists:member_statuses,id',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -89,20 +92,23 @@ class UsersController extends Controller
     public function edit(User $user): View
     {
         $roles = Role::all();
+        $statuses = MemberStatus::all();
         
         return view('admin.users.edit', [
-            'title' => 'Edit User',
-            'user' => $user,
-            'roles' => $roles,
+            'title'     => 'Edit User',
+            'user'      => $user,
+            'roles'     => $roles,
+            'statuses'  => $statuses,
         ]);
     }
 
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'role_id' => 'required|exists:roles,id',
+            'name'              => 'required|string|max:255',
+            'email'             => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'role_id'           => 'required|exists:roles,id',
+            'member_status_id'  => 'nullable|exists:member_statuses,id',
         ]);
 
         $oldRoleId = $user->role_id;
@@ -130,7 +136,8 @@ class UsersController extends Controller
         }
 
         // Log to audit trail
-        AuditLog::record('Updated', 'users', $user->id, "User '{$user->name}' updated (role: {$oldRoleName} → {$newRoleName})");
+        $newStatusName = $user->memberStatus->name ?? 'None';
+        AuditLog::record('Updated', 'users', $user->id, "User '{$user->name}' updated (role: {$oldRoleName} → {$newRoleName}, status: {$newStatusName})");
 
         return redirect()->route('admin.users.index')->with('success', 'User updated successfully');
     }
@@ -177,4 +184,5 @@ class UsersController extends Controller
 
         return redirect()->route('admin.users.index')->with('success', 'User deleted successfully');
     }
+
 }

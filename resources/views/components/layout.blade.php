@@ -110,8 +110,8 @@
 
                     @if (auth()->user()->isAdmin())
                     <a
-                        href="{{ route('admin.member-statuses.index') }}"
-                        class="{{ request()->is('admin/member-statuses*') ? 'active' : '' }}"
+                        href="{{ route('admin.permissions.index') }}"
+                        class="{{ request()->is('admin/permissions*') ? 'active' : '' }}"
                     >
                         <i class="bi bi-shield-lock-fill"></i>
                         <span>Member Status</span>

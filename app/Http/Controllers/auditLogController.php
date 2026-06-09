@@ -10,6 +10,8 @@ class AuditLogController extends Controller
     // Display audit log list
 
     public function index(Request $request) {
+        $this->authorize('view_audit_logs');
+
         $query = AuditLog::with('user')->latest();
 
         //Filters by actions
@@ -41,11 +43,15 @@ class AuditLogController extends Controller
 
     //Show single log entry
     public function show(AuditLog $auditLog) {
+        $this->authorize('view_audit_logs');
+
         return view('audit_log.show', compact('auditLog'));
     }
 
     // Clear all audit logs
     public function clear() {
+        $this->authorize('view_audit_logs');
+
         AuditLog::truncate();
         return redirect()->route('audit_logs.index')->with('success', 'All audit logs have been cleared');
     }

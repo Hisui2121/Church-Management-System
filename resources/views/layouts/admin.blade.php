@@ -105,7 +105,7 @@
                         <span class="menu-text">Audit Trail</span>
                     </a>
 
-                    <a href="{{ route('admin.member-statuses.index') }}" class="menu-item {{ request()->is('admin/member-statuses*') ? 'active' : '' }}" title="Member Statuses">
+                    <a href="{{ route('admin.permissions.index') }}" class="menu-item {{ request()->is('admin/permissions*') ? 'active' : '' }}" title="Permissions">
                         <i class="bi bi-shield-check-fill"></i>
                         <span class="menu-text">Roles & Permission</span>
                     </a>

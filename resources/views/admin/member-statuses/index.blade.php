@@ -1,16 +1,16 @@
 <x-admin-layout>
 
 <x-slot:title>
-    Roles & Permission
+    User Permissions
 </x-slot:title>
 
 <div class="roles-page">
 
     <div class="page-header">
         <h1 class="page-title">
-            <i class="bi bi-shield-check-fill me-2"></i> Roles & Permission
+            <i class="bi bi-shield-check-fill me-2"></i> User Permissions
         </h1>
-        <p class="page-subtitle">Define what each member status is allowed to do across the system</p>
+        <p class="page-subtitle">Define what each user account is allowed to do across the system</p>
     </div>
 
     @if(session('success'))
@@ -21,18 +21,29 @@
         <table class="table-dark">
             <thead>
                 <tr>
-                    <th>Status</th>
+                    <th>User</th>
+                    <th>Role</th>
+                    <th>Member Status</th>
                     <th>Permissions Granted</th>
                     <th style="text-align:right;">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($statuses as $status)
+                @foreach($users as $user)
                     <tr>
-                        <td><strong>{{ $status->name }}</strong></td>
                         <td>
-                            @php $perms = $status->permissions ?? []; @endphp
-                            @if(count($perms) > 0)
+                            <strong>{{ $user->name }}</strong>
+                            <div style="color:#9ca3af;font-size:12px;margin-top:2px;">{{ $user->email }}</div>
+                        </td>
+                        <td>{{ $user->role?->name ?? 'No role' }}</td>
+                        <td>{{ $user->memberStatus?->name ?? 'No status' }}</td>
+                        <td>
+                            @php $perms = $user->permissions ?? []; @endphp
+                            @if($user->isAdmin())
+                                <span style="background:#e0f2fe;color:#075985;font-size:12px;padding:2px 10px;border-radius:999px;font-weight:500;">
+                                    Full access
+                                </span>
+                            @elseif(count($perms) > 0)
                                 <div style="display:flex;flex-wrap:wrap;gap:6px;">
                                     @foreach($perms as $perm)
                                         <span style="background:#dcfce7;color:#166534;font-size:12px;padding:2px 10px;border-radius:999px;font-weight:500;">
@@ -45,7 +56,7 @@
                             @endif
                         </td>
                         <td style="text-align:right;">
-                            <a href="{{ route('admin.member-statuses.edit', $status) }}"
+                            <a href="{{ route('admin.permissions.edit', $user) }}"
                                class="btn btn-primary">
                                 Edit Permissions
                             </a>
@@ -133,6 +144,7 @@
         padding: 16px 20px;
         font-size: 14px;
         color: #374151;
+        vertical-align: top;
     }
 
     .btn {

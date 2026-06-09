@@ -130,9 +130,9 @@
                     @endif
 
                     @if (auth()->user()->isAdmin())
-                    <a href="{{ route('admin.member-statuses.index') }}" class="menu-item {{ request()->is('admin/member-statuses*') ? 'active' : '' }}" title="Member Statuses">
+                    <a href="{{ route('admin.permissions.index') }}" class="menu-item {{ request()->is('admin/permissions*') ? 'active' : '' }}" title="Permissions">
                         <i class="bi bi-shield-check-fill"></i>
-                        <span class="menu-text">Roles & Permission</span>
+                        <span class="menu-text">Permissions</span>
                     </a>
                     @endif
                 </div>

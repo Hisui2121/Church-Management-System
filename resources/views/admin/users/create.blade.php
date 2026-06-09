@@ -68,6 +68,33 @@
                 @enderror
             </div>
 
+
+            {{-- Member Status --}}
+            <div class="form-group">
+                <label for="member_status_id" class="form-label">
+                    Member Status
+                    <span class="label-hint">Controls what this user can access</span>
+                </label>
+                <select
+                    id="member_status_id"
+                    name="member_status_id"
+                    class="form-control @error('member_status_id') is-invalid @enderror"
+                >
+                    <option value="">-- No Status (Admin/Pastor) --</option>
+                    @foreach ($statuses as $status)
+                        <option value="{{ $status->id }}" @selected(old('member_status_id') == $status->id)>
+                            {{ $status->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('member_status_id')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+                <small class="text-muted">
+                    Permissions are assigned per user from the Permissions tab.
+                </small>
+            </div>
+
             {{-- Password --}}
             <div class="form-group">
                 <label for="password" class="form-label">Password</label>
@@ -178,6 +205,14 @@
     .text-muted {
         color: var(--text-muted);
         font-size: 12px;
+    }
+
+    .label-hint {
+        display: block;
+        font-size: 11px;
+        font-weight: 400;
+        color: var(--text-muted);
+        margin-top: 2px;
     }
 
     .form-actions {
