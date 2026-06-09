@@ -34,6 +34,7 @@ class User extends Authenticatable
         'ministry_interest',
         'member_id',
         'role_id',
+        'member_status_id',
     ];
 
     /**

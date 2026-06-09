@@ -1,72 +1,225 @@
 {{-- resources/views/audit_log/show.blade.php --}}
 
-<x-layout>
+<x-admin-layout>
 
 <x-slot:title>
     Audit Log #{{ $auditLog->id }}
 </x-slot:title>
 
-<div class="container-fluid px-4">
+<div class="audit-log-show">
 
-    <div class="d-flex align-items-center mb-4 gap-3">
-        <a href="{{ route('audit_logs.index') }}" class="btn btn-outline-secondary btn-sm">
+    <div class="page-header">
+        <a href="{{ route('audit_logs.index') }}" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Back
         </a>
-        <h2 class="fw-bold mb-0">
+        <h1 class="page-title">
             <i class="bi bi-journal-text me-2"></i> Audit Log #{{ $auditLog->id }}
-        </h2>
+        </h1>
     </div>
 
-    <div class="card shadow-sm" style="max-width: 640px;">
-        <div class="card-body">
+    <div class="details-card">
+        <div class="details-list">
 
-            <dl class="row mb-0">
-
-                <dt class="col-sm-4 text-muted">User</dt>
-                <dd class="col-sm-8">
+            <div class="detail-row">
+                <dt class="detail-label">User</dt>
+                <dd class="detail-value">
                     {{ $auditLog->user?->name ?? 'System' }}
                 </dd>
+            </div>
 
-                <dt class="col-sm-4 text-muted">Action</dt>
-                <dd class="col-sm-8">
+            <div class="detail-row">
+                <dt class="detail-label">Action</dt>
+                <dd class="detail-value">
                     @php
-                        $badges = [
+                        $actionLabels = [
+                            'created'    => 'Add',
+                            'updated'    => 'Update',
+                            'deleted'    => 'Delete',
+                            'login'      => 'Log In',
+                            'logout'     => 'Log Out',
+                            'registered' => 'Register',
+                            'viewed'     => 'View',
+                        ];
+                        $actionLabel = $actionLabels[$auditLog->action] ?? ucfirst($auditLog->action);
+                        
+                        $actionBadges = [
                             'created'    => 'success',
                             'updated'    => 'warning',
                             'deleted'    => 'danger',
                             'login'      => 'primary',
                             'logout'     => 'secondary',
                             'registered' => 'info',
+                            'viewed'     => 'info',
                         ];
-                        $color = $badges[$auditLog->action] ?? 'dark';
+                        $color = $actionBadges[$auditLog->action] ?? 'dark';
                     @endphp
-                    <span class="badge bg-{{ $color }}">
-                        {{ ucfirst($auditLog->action) }}
+                    <span class="badge badge-{{ $color }}">
+                        {{ $actionLabel }}
                     </span>
                 </dd>
+            </div>
 
-                <dt class="col-sm-4 text-muted">Table</dt>
-                <dd class="col-sm-8">
-                    <span class="badge bg-light text-dark border">
+            <div class="detail-row">
+                <dt class="detail-label">Table</dt>
+                <dd class="detail-value">
+                    <span class="badge badge-light">
                         {{ $auditLog->table_name }}
                     </span>
                 </dd>
+            </div>
 
-                <dt class="col-sm-4 text-muted">Record ID</dt>
-                <dd class="col-sm-8">{{ $auditLog->record_id ?? '—' }}</dd>
+            <div class="detail-row">
+                <dt class="detail-label">Record ID</dt>
+                <dd class="detail-value">{{ $auditLog->record_id ?? '—' }}</dd>
+            </div>
 
-                <dt class="col-sm-4 text-muted">Description</dt>
-                <dd class="col-sm-8">{{ $auditLog->description ?? '—' }}</dd>
+            <div class="detail-row">
+                <dt class="detail-label">Description</dt>
+                <dd class="detail-value">{{ $auditLog->description ?? '—' }}</dd>
+            </div>
 
-                <dt class="col-sm-4 text-muted">Date & Time</dt>
-                <dd class="col-sm-8">
+            <div class="detail-row">
+                <dt class="detail-label">Date & Time</dt>
+                <dd class="detail-value">
                     {{ $auditLog->created_at->format('F d, Y — h:i:s A') }}
                 </dd>
-
-            </dl>
+            </div>
 
         </div>
     </div>
 
 </div>
-</x-layout>
+
+<style>
+    .audit-log-show {
+        padding: 0;
+    }
+
+    .page-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 30px;
+    }
+
+    .page-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin: 0;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-secondary {
+        background: white;
+        color: var(--text-dark);
+        border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+        background: #f9fafb;
+    }
+
+    .details-card {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 24px;
+        max-width: 640px;
+    }
+
+    .details-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .detail-row {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 16px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .detail-label {
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .detail-value {
+        font-size: 14px;
+        color: var(--text-dark);
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .badge-success {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .badge-warning {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .badge-danger {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .badge-primary {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .badge-secondary {
+        background: #e5e7eb;
+        color: #374151;
+    }
+
+    .badge-info {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .badge-light {
+        background: #f3f4f6;
+        color: #374151;
+    }
+
+    .badge-dark {
+        background: #374151;
+        color: white;
+    }
+</style>
+
+</x-admin-layout>

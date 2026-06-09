@@ -20,8 +20,10 @@ class MemberStatus extends Model
             'create_members'        => 'Create Members',
             'edit_members'          => 'Edit Members',
             'delete_members'        => 'Delete Members',
-            'view_audit_logs'       => 'View Audit Logs',
+            'view_ministries'       => 'View Ministries',
+            'view_events'           => 'View Events',
             'view_announcements'    => 'View Announcements',
+            'view_audit_logs'       => 'View Audit Logs',
         ];
     }
 

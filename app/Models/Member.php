@@ -21,4 +21,20 @@ class Member extends Model
         'family_group_id',
         'date_joined',
     ];
+
+    /**
+     * Get the member's status
+     */
+    public function memberStatus()
+    {
+        return $this->belongsTo(MemberStatus::class);
+    }
+
+    /**
+     * Get full name
+     */
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
 }

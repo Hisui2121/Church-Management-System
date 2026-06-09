@@ -8,6 +8,14 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\Admin\MemberStatusController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\MembersController as AdminMembersController;
+use App\Http\Controllers\Admin\MinistriesController;
+use App\Http\Controllers\Admin\EventsController;
+use App\Http\Controllers\Admin\AnnouncementsController;
+use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\MessagesController;
+use App\Http\Controllers\Admin\OrdersController;
 
 Route::redirect('/', '/login');
 
@@ -46,15 +54,70 @@ Route::middleware(['auth'])->group(function () {
     // Members — Policy handles per-action authorization
     Route::resource('members', MemberController::class);
 
+    // Member read-only events and announcements
+    Route::get('/events', [EventsController::class, 'index'])->name('events.index');
+    Route::get('/announcements', [AnnouncementsController::class, 'index'])->name('announcements.index');
+
     // Audit logs
     Route::get('/audit-logs',            [AuditLogController::class, 'index'])->name('audit_logs.index');
     Route::get('/audit-logs/{auditLog}', [AuditLogController::class, 'show'])->name('audit_logs.show');
+    Route::delete('/audit-logs/clear',   [AuditLogController::class, 'clear'])->name('audit_logs.clear');
 });
 
 // ---------------------------------------------------------------------------
 // Admin-only routes
 // ---------------------------------------------------------------------------
 Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->group(function () {
+
+    // Admin Dashboard
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    // Admin Members
+    Route::get('/members', [AdminMembersController::class, 'index'])->name('members.index');
+    Route::get('/members/create', [AdminMembersController::class, 'create'])->name('members.create');
+    Route::post('/members', [AdminMembersController::class, 'store'])->name('members.store');
+    Route::get('/members/{id}', [AdminMembersController::class, 'show'])->name('members.show');
+    Route::get('/members/{id}/edit', [AdminMembersController::class, 'edit'])->name('members.edit');
+    Route::put('/members/{id}', [AdminMembersController::class, 'update'])->name('members.update');
+    Route::delete('/members/{id}', [AdminMembersController::class, 'destroy'])->name('members.destroy');
+
+    // Admin Ministries
+    Route::get('/ministries', [MinistriesController::class, 'index'])->name('ministries.index');
+    Route::get('/ministries/create', [MinistriesController::class, 'create'])->name('ministries.create');
+    Route::post('/ministries', [MinistriesController::class, 'store'])->name('ministries.store');
+    Route::get('/ministries/{ministry}/edit', [MinistriesController::class, 'edit'])->name('ministries.edit');
+    Route::put('/ministries/{ministry}', [MinistriesController::class, 'update'])->name('ministries.update');
+    Route::delete('/ministries/{ministry}', [MinistriesController::class, 'destroy'])->name('ministries.destroy');
+
+    // Admin Events
+    Route::get('/events', [EventsController::class, 'index'])->name('events.index');
+    Route::get('/events/create', [EventsController::class, 'create'])->name('events.create');
+    Route::post('/events', [EventsController::class, 'store'])->name('events.store');
+    Route::get('/events/{event}/edit', [EventsController::class, 'edit'])->name('events.edit');
+    Route::put('/events/{event}', [EventsController::class, 'update'])->name('events.update');
+    Route::delete('/events/{event}', [EventsController::class, 'destroy'])->name('events.destroy');
+
+    // Admin Announcements
+    Route::get('/announcements', [AnnouncementsController::class, 'index'])->name('announcements.index');
+    Route::get('/announcements/create', [AnnouncementsController::class, 'create'])->name('announcements.create');
+    Route::post('/announcements', [AnnouncementsController::class, 'store'])->name('announcements.store');
+    Route::get('/announcements/{announcement}/edit', [AnnouncementsController::class, 'edit'])->name('announcements.edit');
+    Route::put('/announcements/{announcement}', [AnnouncementsController::class, 'update'])->name('announcements.update');
+    Route::delete('/announcements/{announcement}', [AnnouncementsController::class, 'destroy'])->name('announcements.destroy');
+
+    // Admin Banners
+    Route::get('/banners', [BannerController::class, 'index'])->name('banners.index');
+    Route::get('/banners/create', [BannerController::class, 'create'])->name('banners.create');
+    Route::post('/banners', [BannerController::class, 'store'])->name('banners.store');
+    Route::get('/banners/{banner}/edit', [BannerController::class, 'edit'])->name('banners.edit');
+    Route::put('/banners/{banner}', [BannerController::class, 'update'])->name('banners.update');
+    Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('banners.destroy');
+
+    // Admin Messages
+    Route::get('/messages', [MessagesController::class, 'index'])->name('messages.index');
+
+    // Admin Orders
+    Route::get('/orders', [OrdersController::class, 'index'])->name('orders.index');
 
     // Member Status permissions management
     Route::get('/member-statuses',                     [MemberStatusController::class, 'index'])->name('member-statuses.index');

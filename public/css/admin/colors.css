@@ -1,0 +1,381 @@
+/* ====================================
+   ADMIN COLORS & THEMING
+==================================== */
+
+:root {
+    --primary: #67b69e;
+    --primary-dark: #5a9d87;
+    --primary-light: #e8f5f0;
+    --primary-50: #f0faf7;
+    --primary-100: #dcf0eb;
+    --primary-200: #b8e1d9;
+    --primary-300: #94d2c7;
+    --primary-400: #70c3b5;
+
+    --secondary: #2c3e50;
+    --secondary-light: #34495e;
+
+    --success: #10b981;
+    --success-light: #d1fae5;
+    --success-dark: #059669;
+
+    --warning: #f59e0b;
+    --warning-light: #fef3c7;
+    --warning-dark: #d97706;
+
+    --danger: #ef4444;
+    --danger-light: #fee2e2;
+    --danger-dark: #dc2626;
+
+    --info: #3b82f6;
+    --info-light: #dbeafe;
+    --info-dark: #1d4ed8;
+
+    --border: #ececec;
+    --border-light: #f5f5f5;
+    --border-dark: #d0d0d0;
+
+    --bg-light: #f5f7fb;
+    --bg-lighter: #fafbfc;
+    --bg-dark: #1a202c;
+
+    --text-dark: #333;
+    --text-muted: #7b8794;
+    --text-light: #999;
+
+    --white: #ffffff;
+    --black: #000000;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.15);
+    --shadow-2xl: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+/* ====================================
+   TEXT COLORS
+==================================== */
+
+.text-primary {
+    color: var(--primary);
+}
+
+.text-secondary {
+    color: var(--secondary);
+}
+
+.text-success {
+    color: var(--success);
+}
+
+.text-warning {
+    color: var(--warning);
+}
+
+.text-danger {
+    color: var(--danger);
+}
+
+.text-info {
+    color: var(--info);
+}
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+.text-dark {
+    color: var(--text-dark);
+}
+
+.text-light {
+    color: var(--text-light);
+}
+
+/* ====================================
+   BACKGROUND COLORS
+==================================== */
+
+.bg-primary {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.bg-primary-light {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.bg-secondary {
+    background: var(--secondary);
+    color: var(--white);
+}
+
+.bg-success {
+    background: var(--success);
+    color: var(--white);
+}
+
+.bg-success-light {
+    background: var(--success-light);
+    color: var(--success-dark);
+}
+
+.bg-warning {
+    background: var(--warning);
+    color: var(--white);
+}
+
+.bg-warning-light {
+    background: var(--warning-light);
+    color: var(--warning-dark);
+}
+
+.bg-danger {
+    background: var(--danger);
+    color: var(--white);
+}
+
+.bg-danger-light {
+    background: var(--danger-light);
+    color: var(--danger-dark);
+}
+
+.bg-info {
+    background: var(--info);
+    color: var(--white);
+}
+
+.bg-info-light {
+    background: var(--info-light);
+    color: var(--info-dark);
+}
+
+/* ====================================
+   BORDER COLORS
+==================================== */
+
+.border-primary {
+    border-color: var(--primary);
+}
+
+.border-success {
+    border-color: var(--success);
+}
+
+.border-warning {
+    border-color: var(--warning);
+}
+
+.border-danger {
+    border-color: var(--danger);
+}
+
+.border-light {
+    border-color: var(--border-light);
+}
+
+.border-muted {
+    border-color: var(--text-muted);
+}
+
+/* ====================================
+   HOVER STATES
+==================================== */
+
+.hover-primary:hover {
+    color: var(--primary);
+}
+
+.hover-primary:hover {
+    background: var(--primary-light);
+}
+
+.hover-success:hover {
+    color: var(--success);
+}
+
+.hover-danger:hover {
+    color: var(--danger);
+}
+
+/* ====================================
+   GRADIENTS
+==================================== */
+
+.gradient-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: var(--white);
+}
+
+.gradient-success {
+    background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+    color: var(--white);
+}
+
+.gradient-warning {
+    background: linear-gradient(135deg, var(--warning) 0%, var(--warning-dark) 100%);
+    color: var(--white);
+}
+
+.gradient-danger {
+    background: linear-gradient(135deg, var(--danger) 0%, var(--danger-dark) 100%);
+    color: var(--white);
+}
+
+/* ====================================
+   INDICATORS
+==================================== */
+
+.badge-primary {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.badge-success {
+    background: var(--success-light);
+    color: var(--success-dark);
+}
+
+.badge-warning {
+    background: var(--warning-light);
+    color: var(--warning-dark);
+}
+
+.badge-danger {
+    background: var(--danger-light);
+    color: var(--danger-dark);
+}
+
+.badge-info {
+    background: var(--info-light);
+    color: var(--info-dark);
+}
+
+/* ====================================
+   STATUS INDICATORS
+==================================== */
+
+.status-active {
+    color: var(--success);
+}
+
+.status-inactive {
+    color: var(--text-muted);
+}
+
+.status-pending {
+    color: var(--warning);
+}
+
+.status-error {
+    color: var(--danger);
+}
+
+.status-info {
+    color: var(--info);
+}
+
+.status-dot.active {
+    background: var(--success);
+}
+
+.status-dot.inactive {
+    background: var(--text-muted);
+}
+
+.status-dot.pending {
+    background: var(--warning);
+}
+
+.status-dot.error {
+    background: var(--danger);
+}
+
+.status-dot.info {
+    background: var(--info);
+}
+
+/* ====================================
+   INTERACTIVE ELEMENTS
+==================================== */
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px var(--primary-light) !important;
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+a.text-dark:hover {
+    color: var(--primary);
+}
+
+a.text-muted:hover {
+    color: var(--text-dark);
+}
+
+/* ====================================
+   SELECTION STYLES
+==================================== */
+
+::selection {
+    background: var(--primary);
+    color: var(--white);
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-light);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+/* ====================================
+   DARK MODE (Optional)
+==================================== */
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-light: #1a202c;
+        --bg-lighter: #2d3748;
+        --text-dark: #e0e0e0;
+        --text-muted: #a0aec0;
+        --border: #4a5568;
+    }
+
+    body {
+        background: var(--bg-light);
+        color: var(--text-dark);
+    }
+
+    .table-wrapper,
+    .modal {
+        background: #2d3748;
+        border-color: var(--border);
+    }
+}

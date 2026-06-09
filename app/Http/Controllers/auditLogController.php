@@ -43,4 +43,10 @@ class AuditLogController extends Controller
     public function show(AuditLog $auditLog) {
         return view('audit_log.show', compact('auditLog'));
     }
+
+    // Clear all audit logs
+    public function clear() {
+        AuditLog::truncate();
+        return redirect()->route('audit_logs.index')->with('success', 'All audit logs have been cleared');
+    }
 }

@@ -56,6 +56,7 @@
                     </a>
 
                     {{-- MEMBERS --}}
+                    @if (auth()->user()->hasPermission('view_members'))
                     <a
                         href="{{ route('members.index') }}"
                         class="{{ request()->is('members*') ? 'active' : '' }}"
@@ -63,8 +64,10 @@
                         <i class="bi bi-people-fill"></i>
                         <span>Members</span>
                     </a>
+                    @endif
 
                     {{-- MINISTRIES --}}
+                    @if (auth()->user()->hasPermission('view_ministries'))
                     <a
                         href="#"
                         class="{{ request()->is('ministries*') ? 'active' : '' }}"
@@ -72,8 +75,10 @@
                         <i class="bi bi-heart-fill"></i>
                         <span>Ministry</span>
                     </a>
+                    @endif
 
                     {{-- EVENTS --}}
+                    @if (auth()->user()->hasPermission('view_events'))
                     <a
                         href="#"
                         class="{{ request()->is('events*') ? 'active' : '' }}"
@@ -81,8 +86,10 @@
                         <i class="bi bi-calendar-event-fill"></i>
                         <span>Events</span>
                     </a>
+                    @endif
 
                     {{-- ANNOUNCEMENTS --}}
+                    @if (auth()->user()->hasPermission('view_announcements'))
                     <a
                         href="#"
                         class="{{ request()->is('announcements*') ? 'active' : '' }}"
@@ -90,6 +97,7 @@
                         <i class="bi bi-megaphone-fill"></i>
                         <span>News</span>
                     </a>
+                    @endif
 
                     {{-- SETTINGS --}}
                     <a
@@ -110,6 +118,7 @@
                     </a>
                     @endif
 
+                    @if (auth()->user()->hasPermission('view_audit_logs'))
                     <a
                         href="{{ route('audit_logs.index') }}"
                         class="{{ request()->is('audit_logs*') ? 'active' : '' }}"
@@ -117,6 +126,7 @@
                         <i class="bi bi-journal-text"></i>
                         <span>Audit Trail</span>
                     </a>
+                    @endif
 
                 </nav>
 
