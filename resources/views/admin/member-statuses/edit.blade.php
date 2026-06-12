@@ -22,7 +22,14 @@
                 Admins always have full access regardless of these settings.
             </p>
 
-            @php $current = $user->permissions ?? []; @endphp
+            @php $current = $user->getDirectPermissions()->pluck('name')->toArray(); @endphp
+
+            @if($user->isAdmin())
+            <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#92400e;">
+                <i class="bi bi-info-circle-fill"></i>
+                This user is an <strong>Admin</strong> and has full access to everything. Permissions cannot be restricted.
+            </div>
+            @endif
 
             <div class="permissions-list">
                 @foreach($available as $key => $label)

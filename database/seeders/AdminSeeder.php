@@ -1,9 +1,11 @@
 <?php
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class AdminSeeder extends Seeder
 {
@@ -26,18 +28,17 @@ class AdminSeeder extends Seeder
         DB::table('member_statuses')
             ->where('name', 'Visitor')
             ->update(['permissions' => json_encode([])]);
-        
-        DB::table('users')->updateOrInsert(
+
+        $admin = User::updateOrCreate(
             ['email' => 'admin@church.com'],
             [
                 'name'              => 'Church Admin',
-                'email'             => 'admin@church.com',
                 'password'          => Hash::make('Admn@1234'),
-                'role_id'           => 1,
                 'member_status_id'  => null,
-                'created_at'        => now(),
-                'updated_at'        => now(),
             ]
         );
+
+        $adminRole = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
+        $admin->syncRoles([$adminRole]);
     }
 }

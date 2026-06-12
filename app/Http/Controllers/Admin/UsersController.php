@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Role;
 use App\Models\Member;
 use App\Models\MemberStatus;
 use App\Models\AuditLog;
+use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
@@ -16,7 +16,7 @@ class UsersController extends Controller
 {
     public function index(): View
     {
-        $users = User::with('role', 'memberStatus')
+        $users = User::with('roles', 'memberStatus')
             ->latest('created_at')
             ->paginate(15);
         
@@ -44,39 +44,37 @@ class UsersController extends Controller
             'name'              => 'required|string|max:255',
             'email'             => 'required|string|email|max:255|unique:users',
             'password'          => 'required|string|min:8|confirmed',
-            'role_id'           => 'required|exists:roles,id',
+            'role_name'         => 'required|exists:roles,name',
             'member_status_id'  => 'nullable|exists:member_statuses,id',
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
-        $user = User::create($validated);
+        $user = User::create([
+            'name'              => $validated['name'],
+            'email'             => $validated['email'],
+            'password'          => Hash::make($validated['password']),
+            'member_status_id'  => $validated['member_status_id'] ?? null,
+        ]);
 
-        // Automatically create member record if role is Member
-        if ($user->role_id === Role::MEMBER) {
-            // Split name into first and last name
+        //Assign role via Spatie
+        $user->assignRole($validated['role_name']);
+
+        if ($validated['role_name'] === 'Member') {
             $nameParts = explode(' ', $user->name, 2);
-            $firstName = $nameParts[0];
-            $lastName = $nameParts[1] ?? '';
-
-            // Get default member status (usually "Active")
             $defaultStatus = MemberStatus::where('name', 'Active')->first();
 
-            // Create member record
             $member = Member::create([
-                'first_name' => $firstName,
-                'last_name' => $lastName,
-                'email' => $user->email,
-                'member_status_id' => $defaultStatus?->id,
-                'date_joined' => now(),
+                'first_name'        => $nameParts[0],
+                'last_name'         => $nameParts[1] ?? '',
+                'email'             => $user->email,
+                'member_status_id'  => $defaultStatus?->id,
+                'date_joined'       => now(),
             ]);
 
-            // Link member to user
             $user->update(['member_id' => $member->id]);
         }
 
         // Log to audit trail
-        $roleName = $user->role->name ?? 'Unknown';
-        AuditLog::record('Created', 'users', $user->id, "User '{$user->name}' ({$roleName}) created");
+        AuditLog::record('Created', 'users', $user->id, "User '{$user->name}' ({$validated['role_name']}) created");
 
         return redirect()->route('admin.users.index')->with('success', 'User created successfully');
     }
@@ -85,7 +83,7 @@ class UsersController extends Controller
     {
         return view('admin.users.show', [
             'title' => 'User Details',
-            'user' => $user->load('role', 'memberStatus', 'member'),
+            'user' => $user->load('roles', 'memberStatus', 'member'),
         ]);
     }
 
@@ -107,29 +105,32 @@ class UsersController extends Controller
         $validated = $request->validate([
             'name'              => 'required|string|max:255',
             'email'             => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'role_id'           => 'required|exists:roles,id',
+            'role_name'         => 'required|exists:roles,name',
             'member_status_id'  => 'nullable|exists:member_statuses,id',
         ]);
 
-        $oldRoleId = $user->role_id;
-        $oldRoleName = $user->role->name ?? 'Unknown';
-        $user->update($validated);
-        $newRoleName = $user->role->name ?? 'Unknown';
+        $oldRoleName = $user->getRoleNames()->first() ?? 'Unknown';
+
+        $user->update([
+            'name'              => $validated['name'],
+            'email'             => $validated['email'],
+            'member_status_id'  => $validated['member_status_id'] ?? null,
+        ]);
+
+        //Sync roles via Spatie
+        $user->syncRoles([$validated['role_name']]);
 
         // Handle member creation if changing to Member role
-        if ($oldRoleId !== Role::MEMBER && $user->role_id === Role::MEMBER && !$user->member_id) {
+        if ($validated['role_name'] === 'Member' && !$user->member_id) {
             $nameParts = explode(' ', $user->name, 2);
-            $firstName = $nameParts[0];
-            $lastName = $nameParts[1] ?? '';
-
             $defaultStatus = MemberStatus::where('name', 'Active')->first();
 
             $member = Member::create([
-                'first_name' => $firstName,
-                'last_name' => $lastName,
-                'email' => $user->email,
-                'member_status_id' => $defaultStatus?->id,
-                'date_joined' => now(),
+                'first_name'        => $nameParts[0],
+                'last_name'         => $nameParts[1] ?? '',
+                'email'             => $user->email,
+                'member_status_id'  => $defaultStatus?->id,
+                'date_joined'       => now(),
             ]);
 
             $user->update(['member_id' => $member->id]);
@@ -137,7 +138,7 @@ class UsersController extends Controller
 
         // Log to audit trail
         $newStatusName = $user->memberStatus->name ?? 'None';
-        AuditLog::record('Updated', 'users', $user->id, "User '{$user->name}' updated (role: {$oldRoleName} → {$newRoleName}, status: {$newStatusName})");
+        AuditLog::record('Updated', 'users', $user->id, "User '{$user->name}' updated (role: {$oldRoleName} → {$validated['role_name']}, status: {$newStatusName})");
 
         return redirect()->route('admin.users.index')->with('success', 'User updated successfully');
     }
@@ -168,14 +169,14 @@ class UsersController extends Controller
 
     public function destroy(User $user)
     {
-        $userName = $user->name;
-        $userId = $user->id;
-        $roleName = $user->role->name ?? 'Unknown';
-
         // Prevent deleting currently logged-in user
         if (auth()->id() === $user->id) {
             return redirect()->route('admin.users.index')->with('error', 'You cannot delete your own account');
         }
+
+        $userName = $user->name;
+        $userId = $user->id;
+        $roleName = $user->getRoleNames()->first() ?? 'Unknown';
 
         $user->delete();
 

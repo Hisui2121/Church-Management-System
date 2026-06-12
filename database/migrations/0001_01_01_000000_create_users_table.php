@@ -29,7 +29,6 @@ return new class extends Migration
             $table->date('baptism_date')->nullable();
             $table->string('ministry_interest')->nullable();
             $table->unsignedBigInteger('member_id')->nullable();
-            $table->unsignedBigInteger('role_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

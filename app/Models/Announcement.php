@@ -3,6 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+/**
+ * @property int $id
+ * @property string $title
+ * @property string $body
+ * @property string|null $image_path
+ * @property int|null $created_by
+ * @property bool $is_active
+ * @property \Carbon\Carbon|null $published_at
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property-read User|null $creator
+ */
 
 class Announcement extends Model
 {

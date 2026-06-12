@@ -38,14 +38,5 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         Ministry::observe(MinistryObserver::class);
         Announcement::observe(AnnouncementObserver::class);
-
-        //Gates
-        Gate::define('view_dashboard', function ($user) {
-            return $user->hasPermission('view_dashboard');
-        });
-
-        Gate::define('view_audit_logs', function ($user) {
-            return $user->hasPermission('view_audit_logs');
-        });
     }
 }

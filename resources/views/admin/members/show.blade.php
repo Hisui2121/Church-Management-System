@@ -13,7 +13,7 @@
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ $member->name }}" alt="Avatar" class="member-avatar">
                 <div class="member-info">
                     <h1 class="member-name">{{ $member->name }}</h1>
-                    <p class="member-role">{{ $member->role->name ?? 'Member' }}</p>
+                    <p class="member-role">{{ $member->getRoleNames()->first() ?? 'Member' }}</p>
                     <div class="member-status">
                         @if ($member->memberStatus)
                             @if ($member->memberStatus->name === 'Active')

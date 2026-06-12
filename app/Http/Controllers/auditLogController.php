@@ -9,8 +9,11 @@ class AuditLogController extends Controller
 {
     // Display audit log list
 
-    public function index(Request $request) {
-        $this->authorize('view_audit_logs');
+    public function index(Request $request) 
+    {
+        if (!auth()->user()->hasPermission('view_audit_logs')) {
+            abort(403, 'You do not have permissionto view audit logs.');
+        }
 
         $query = AuditLog::with('user')->latest();
 
@@ -43,14 +46,18 @@ class AuditLogController extends Controller
 
     //Show single log entry
     public function show(AuditLog $auditLog) {
-        $this->authorize('view_audit_logs');
+        if (!auth()->user()->hasPermission('view_audit_logs')) {
+            abort(403);
+        }
 
         return view('audit_log.show', compact('auditLog'));
     }
 
     // Clear all audit logs
     public function clear() {
-        $this->authorize('view_audit_logs');
+        if (!auth()->user()->hasPermission('view_audit_logs')) {
+            abort(403);
+        }
 
         AuditLog::truncate();
         return redirect()->route('audit_logs.index')->with('success', 'All audit logs have been cleared');

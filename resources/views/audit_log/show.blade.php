@@ -1,6 +1,7 @@
 {{-- resources/views/audit_log/show.blade.php --}}
 
-<x-admin-layout>
+@php $layout = auth()->user()->isAdmin() ? 'admin-layout' : 'member-layout'; @endphp
+<x-dynamic-component :component="$layout">
 
 <x-slot:title>
     Audit Log #{{ $auditLog->id }}
@@ -222,4 +223,4 @@
     }
 </style>
 
-</x-admin-layout>
+</x-dynamic-component>

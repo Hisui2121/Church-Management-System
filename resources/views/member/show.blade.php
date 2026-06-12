@@ -1,8 +1,6 @@
-<x-layout>
-
-<x-slot:title>
-    Member Profile
-</x-slot:title>
+@php $layout = auth()->user()->isAdmin() ? 'admin-layout' : 'member-layout'; @endphp
+<x-dynamic-component :component="$layout">
+<x-slot:title>Member Profile</x-slot:title>
 <div class="profile-card">
 
     <div class="profile-header">
@@ -54,4 +52,4 @@
     </div>
 
 </div>
-</x-layout>
+</x-dynamic-component>

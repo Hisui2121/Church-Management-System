@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->foreignId('member_status_id')
                   ->nullable()
-                  ->after('role_id')
                   ->constrained('member_statuses')
                   ->nullOnDelete();
         });

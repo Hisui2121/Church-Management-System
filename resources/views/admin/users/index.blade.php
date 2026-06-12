@@ -44,7 +44,7 @@
 
                         <td>
                             <span class="badge badge-{{ $user->isAdmin() ? 'danger' : ($user->isPastor() ? 'warning' : 'info') }}">
-                                {{ $user->role->name ?? 'Unknown' }}
+                                {{ $user->roles->first()?->name ?? 'Unknown' }}
                             </span>
                         </td>
 

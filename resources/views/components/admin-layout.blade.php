@@ -70,10 +70,12 @@
                 <div class="menu-section">
                     <div class="section-label">MAIN MENU</div>
 
-                    <a href="{{ route('dashboard') }}" class="menu-item {{ request()->is('dashboard') ? 'active' : '' }}" title="Dashboard">
+                    @if (auth()->user()->hasPermission('view_dashboard'))
+                    <a href="{{ route('admin.dashboard') }}" class="menu-item {{ request()->is('admin/dashboard') ? 'active' : '' }}" title="Dashboard">
                         <i class="bi bi-house-door-fill"></i>
                         <span class="menu-text">Dashboard</span>
                     </a>
+                    @endif
 
                     @if (auth()->user()->hasPermission('view_members'))
                     <a href="{{ route('admin.members.index') }}" class="menu-item {{ request()->is('admin/members*') ? 'active' : '' }}" title="Members">
@@ -130,9 +132,9 @@
                     @endif
 
                     @if (auth()->user()->isAdmin())
-                    <a href="{{ route('admin.permissions.index') }}" class="menu-item {{ request()->is('admin/permissions*') ? 'active' : '' }}" title="Permissions">
+                    <a href="{{ route('admin.permissions.index') }}" class="menu-item {{ request()->is('admin/permissions*') ? 'active' : '' }}" title="Roles & Permissions">
                         <i class="bi bi-shield-check-fill"></i>
-                        <span class="menu-text">Permissions</span>
+                        <span class="menu-text">Roles & Permissions</span>
                     </a>
                     @endif
                 </div>
@@ -144,7 +146,7 @@
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ auth()->user()->name }}" alt="Avatar" class="avatar-small">
                     <div class="user-info-mini">
                         <div class="user-name-mini">{{ auth()->user()->name }}</div>
-                        <div class="user-role-mini">{{ auth()->user()->role->name ?? 'Admin' }}</div>
+                        <div class="user-role-mini">{{ auth()->user()->roles->first()?->name ?? 'Admin' }}</div>
                     </div>
                 </div>
             </div>

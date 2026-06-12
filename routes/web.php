@@ -50,7 +50,7 @@ Route::post('/logout', [LoginController::class, 'destroy'])
 // ---------------------------------------------------------------------------
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
 
     // Members — Policy handles per-action authorization
     Route::resource('members', MemberController::class);
@@ -63,7 +63,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/audit-logs',            [AuditLogController::class, 'index'])->name('audit_logs.index');
     Route::get('/audit-logs/{auditLog}', [AuditLogController::class, 'show'])->name('audit_logs.show');
     Route::delete('/audit-logs/clear',   [AuditLogController::class, 'clear'])->name('audit_logs.clear');
-});
+
+    // Permitted View-only Routes
+    Route::get('/admin/ministries',             [MinistriesController::class, 'index'])->name('admin.ministries.index');
+    Route::get('/admin/events',                 [EventsController::class, 'index'])->name('admin.events.index');
+    Route::get('/admin/announcements',          [AnnouncementsController::class, 'index'])->name('admin.announcements.index');
+
+    Route::get('/ministries', [MinistriesController::class, 'index'])->name('ministries.index');
+}); 
+
 
 // ---------------------------------------------------------------------------
 // Admin-only routes
@@ -94,7 +102,6 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     Route::delete('/users/{user}', [UsersController::class, 'destroy'])->name('users.destroy');
 
     // Admin Ministries
-    Route::get('/ministries', [MinistriesController::class, 'index'])->name('ministries.index');
     Route::get('/ministries/create', [MinistriesController::class, 'create'])->name('ministries.create');
     Route::post('/ministries', [MinistriesController::class, 'store'])->name('ministries.store');
     Route::get('/ministries/{ministry}/edit', [MinistriesController::class, 'edit'])->name('ministries.edit');
@@ -102,7 +109,6 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     Route::delete('/ministries/{ministry}', [MinistriesController::class, 'destroy'])->name('ministries.destroy');
 
     // Admin Events
-    Route::get('/events', [EventsController::class, 'index'])->name('events.index');
     Route::get('/events/create', [EventsController::class, 'create'])->name('events.create');
     Route::post('/events', [EventsController::class, 'store'])->name('events.store');
     Route::get('/events/{event}/edit', [EventsController::class, 'edit'])->name('events.edit');
@@ -110,7 +116,6 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     Route::delete('/events/{event}', [EventsController::class, 'destroy'])->name('events.destroy');
 
     // Admin Announcements
-    Route::get('/announcements', [AnnouncementsController::class, 'index'])->name('announcements.index');
     Route::get('/announcements/create', [AnnouncementsController::class, 'create'])->name('announcements.create');
     Route::post('/announcements', [AnnouncementsController::class, 'store'])->name('announcements.store');
     Route::get('/announcements/{announcement}/edit', [AnnouncementsController::class, 'edit'])->name('announcements.edit');
@@ -125,15 +130,21 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     Route::put('/banners/{banner}', [BannerController::class, 'update'])->name('banners.update');
     Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('banners.destroy');
 
-    // Admin Messages
-    Route::get('/messages', [MessagesController::class, 'index'])->name('messages.index');
-
-    // Admin Orders
-    Route::get('/orders', [OrdersController::class, 'index'])->name('orders.index');
-
     // User permissions management
     Route::get('/permissions',             [UserPermissionController::class, 'index'])->name('permissions.index');
     Route::get('/permissions/{user}/edit', [UserPermissionController::class, 'edit'])->name('permissions.edit');
     Route::put('/permissions/{user}',      [UserPermissionController::class, 'update'])->name('permissions.update');
 
+    // Messages
+    Route::get('/messages',                     [MessagesController::class, 'index'])->name('messages.index');
+    Route::post('/messages',                    [MessagesController::class, 'store'])->name('messages.store');
+    Route::patch('/messages/{message}/read',    [MessagesController::class, 'markRead'])->name('messages.read');
+    Route::delete('/messages/{message}',        [MessagesController::class, 'destroy'])->name('messages.destroy');
+
+    // Orders
+    Route::get('/orders',               [OrdersController::class, 'index'])->name('orders.index');
+    Route::put('/orders/{order}',       [OrdersController::class, 'update'])->name('orders.update');
+    Route::delete('/orders/{order}',    [OrdersController::class, 'destroy'])->name('orders.destroy');
 });
+
+Route::get('/hello', [HelloController::class, 'index'])->name('landing');

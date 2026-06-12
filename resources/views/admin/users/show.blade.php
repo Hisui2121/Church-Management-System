@@ -19,7 +19,7 @@
                 <h2 class="user-name">{{ $user->name }}</h2>
                 <p class="user-email">{{ $user->email }}</p>
                 <span class="badge badge-{{ $user->isAdmin() ? 'danger' : ($user->isPastor() ? 'warning' : 'info') }}">
-                    {{ $user->role->name ?? 'Unknown' }}
+                    {{ $user->getRoleNames()->first() ?? 'No Role' }}
                 </span>
             </div>
             <div class="user-actions">
@@ -40,7 +40,7 @@
 
             <div class="detail-group">
                 <label>Role</label>
-                <p>{{ $user->role->name ?? 'N/A' }}</p>
+                <p>{{ $user->roles->first()?->name ?? 'N/A' }}</p>
             </div>
 
             @if ($user->member)

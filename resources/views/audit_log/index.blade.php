@@ -1,6 +1,7 @@
 {{-- resources/views/audit_log/index.blade.php --}}
 
-<x-admin-layout>
+@php $layout = auth()->user()->isAdmin() ? 'admin-layout' : 'member-layout'; @endphp
+<x-dynamic-component :component="$layout">
 
 <x-slot:title>
     Audit Trail
@@ -348,5 +349,5 @@
     }
 </style>
 
-</x-admin-layout>
+</x-dynamic-component>
 

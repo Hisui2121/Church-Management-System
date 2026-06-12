@@ -11,6 +11,9 @@ class MinistriesController extends Controller
 {
     public function index(): View
     {
+        if (!auth()->user()->hasPermission('view_ministries')) {
+            abort(403, 'You do not have permission to view ministries.');
+        }
         $ministries = Ministry::latest()->paginate(15);
         
         return view('admin.ministries.index', [

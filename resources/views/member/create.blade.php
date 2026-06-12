@@ -1,8 +1,6 @@
-<x-layout>
-
-<x-slot:title>
-    Add Member
-</x-slot:title>
+@php $layout = auth()->user()->isAdmin() ? 'admin-layout' : 'member-layout'; @endphp
+<x-dynamic-component :component="$layout">
+<x-slot:title>Add Member</x-slot:title>
 
 <div class="page-header">
     <h2>Add Member</h2>
@@ -23,4 +21,4 @@
     </form>
 </div>
 
-</x-layout>
+</x-dynamic-component>

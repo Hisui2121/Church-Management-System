@@ -12,11 +12,6 @@ class ChurchManagementSeeder extends Seeder
         // ------------------------------------------------------------
         // Lookup tables
         // ------------------------------------------------------------
-        DB::table('roles')->insert([
-            ['name' => 'Admin',   'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Pastor',  'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Member',  'created_at' => now(), 'updated_at' => now()],
-        ]);
 
         DB::table('member_statuses')->insert([
             ['name' => 'Active',   'created_at' => now(), 'updated_at' => now()],
@@ -156,10 +151,10 @@ class ChurchManagementSeeder extends Seeder
         // USERS
         // ------------------------------------------------------------
         DB::table('users')->insert([
-            ['name' => 'Ritz Gabriell Paredes',   'email' => 'ritz.paredes@email.com',   'password' => bcrypt('password'), 'member_id' => 1, 'role_id' => 3, 'member_status_id' => 1, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Jade Stephen Casano',     'email' => 'jade.casano@email.com',    'password' => bcrypt('password'), 'member_id' => 2, 'role_id' => 3, 'member_status_id' => 1, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Jobert Bryze Ayapana',    'email' => 'jobert.ayapana@email.com', 'password' => bcrypt('password'), 'member_id' => 3, 'role_id' => 3, 'member_status_id' => 1, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Jaedee Janiell Manalang', 'email' => 'jaedee.manalang@email.com','password' => bcrypt('password'), 'member_id' => 4, 'role_id' => 3, 'member_status_id' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Ritz Gabriell Paredes',   'email' => 'ritz.paredes@email.com',   'password' => bcrypt('password'), 'member_id' => 1, 'member_status_id' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Jade Stephen Casano',     'email' => 'jade.casano@email.com',    'password' => bcrypt('password'), 'member_id' => 2, 'member_status_id' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Jobert Bryze Ayapana',    'email' => 'jobert.ayapana@email.com', 'password' => bcrypt('password'), 'member_id' => 3, 'member_status_id' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Jaedee Janiell Manalang', 'email' => 'jaedee.manalang@email.com','password' => bcrypt('password'), 'member_id' => 4, 'member_status_id' => 1, 'created_at' => now(), 'updated_at' => now()],
         ]);
 
         // ------------------------------------------------------------

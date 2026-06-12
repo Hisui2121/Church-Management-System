@@ -4,41 +4,43 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
-use App\Models\MemberStatus;
 use App\Models\User;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
 
 class UserPermissionController extends Controller
 {
     public function index()
     {
-        $users = User::with('role', 'memberStatus')
+        $users = User::with('roles', 'permissions', 'memberStatus')
             ->orderBy('name')
             ->get();
-        $available = MemberStatus::availablePermissions();
+
+        $available = Permission::all()->mapWithKeys(function ($perm) {
+        return [$perm->name => ucwords(str_replace('_', ' ', $perm->name))];
+    })->toArray();
 
         return view('admin.member-statuses.index', compact('users', 'available'));
     }
 
     public function edit(User $user)
     {
-        $available = MemberStatus::availablePermissions();
+        $available = Permission::all()->pluck('name', 'name')->toArray();
 
+        $available = collect($available)->mapWithKeys(function ($name) {
+            $label = ucwords(str_replace('_', ' ', $name));
+            return [$name => $label];
+        })->toArray();
         return view('admin.member-statuses.edit', compact('user', 'available'));
     }
 
     public function update(Request $request, User $user)
     {
-        $permissions = array_values(array_intersect(
-            $request->input('permissions', []),
-            array_keys(MemberStatus::availablePermissions())
-        ));
+        $permissions = $request->input('permissions', []);
 
-        $user->update([
-            'permissions' => $permissions,
-        ]);
+        $user->syncPermissions($permissions);
 
-        AuditLog::record('Updated', 'users', $user->id, "Permissions updated for user '{$user->name}'");
+        AuditLog::record('Updated', 'users', $user->id, "Permissions updated for user '{$user->name}': " . implode(', ', $permissions));
 
         return redirect()
             ->route('admin.permissions.index')

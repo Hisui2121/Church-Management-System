@@ -12,6 +12,9 @@ class EventsController extends Controller
 {
     public function index(): View
     {
+        if (!auth()->user()->hasPermission('view_events')) {
+            abort(403, 'You do not have permission to view events.');
+        }
         // If user is admin, show admin view with edit/delete actions
         if (auth()->user()->isAdmin()) {
             $events = Service::latest()->paginate(15);

@@ -118,7 +118,7 @@
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ auth()->user()->name }}" alt="Avatar" class="avatar-small">
                     <div class="user-info-mini">
                         <div class="user-name-mini">{{ auth()->user()->name }}</div>
-                        <div class="user-role-mini">{{ auth()->user()->role->name ?? 'Admin' }}</div>
+                        <div class="user-role-mini">{{ auth()->user()->roles->first()?->name ?? 'Admin' }}</div>
                     </div>
                 </div>
             </div>

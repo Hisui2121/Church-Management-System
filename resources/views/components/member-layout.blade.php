@@ -70,7 +70,7 @@
                 <div class="menu-section">
                     <div class="section-label">MAIN MENU</div>
 
-                    <a href="{{ route('dashboard') }}" class="menu-item {{ request()->is('dashboard') ? 'active' : '' }}" title="Dashboard">
+                    <a href="{{ route('user.dashboard') }}" class="menu-item {{ request()->is('dashboard') ? 'active' : '' }}" title="Dashboard">
                         <i class="bi bi-house-door-fill"></i>
                         <span class="menu-text">Dashboard</span>
                     </a>
@@ -83,7 +83,7 @@
                     @endif
 
                     @if (auth()->user()->hasPermission('view_ministries'))
-                    <a href="{{ route('admin.ministries.index') }}" class="menu-item {{ request()->is('admin/ministries*') ? 'active' : '' }}" title="Ministries">
+                    <a href="{{ route('ministries.index') }}" class="menu-item {{ request()->is('admin/ministries*') ? 'active' : '' }}" title="Ministries">
                         <i class="bi bi-heart-fill"></i>
                         <span class="menu-text">Ministries</span>
                     </a>

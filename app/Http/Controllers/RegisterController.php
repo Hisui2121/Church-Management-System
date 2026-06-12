@@ -172,6 +172,8 @@ class RegisterController extends Controller
             'ministry_interest'  => $data['ministry_interest'] ?? null,
         ]);
 
+        $user->assignRole('Member');
+
         AuditLog::record(
             action:         'registered',
             tableName:      'users',

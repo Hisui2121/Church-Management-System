@@ -49,21 +49,21 @@
 
             {{-- Role --}}
             <div class="form-group">
-                <label for="role_id" class="form-label">Role</label>
+                <label for="role_name" class="form-label">Role</label>
                 <select 
-                    id="role_id" 
-                    name="role_id" 
-                    class="form-control @error('role_id') is-invalid @enderror"
+                    id="role_name" 
+                    name="role_name" 
+                    class="form-control @error('role_name') is-invalid @enderror"
                     required
                 >
                     <option value="">-- Select Role --</option>
                     @foreach ($roles as $role)
-                        <option value="{{ $role->id }}" @selected(old('role_id') === (string)$role->id)>
+                        <option value="{{ $role->name }}" @selected(old('role_name') === $role->name)>
                             {{ $role->name }}
                         </option>
                     @endforeach
                 </select>
-                @error('role_id')
+                @error('role_name')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
             </div>

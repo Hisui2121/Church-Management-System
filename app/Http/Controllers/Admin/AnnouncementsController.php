@@ -12,6 +12,9 @@ class AnnouncementsController extends Controller
 {
     public function index(): View
     {
+        if (!auth()->user()->hasPermission('view_announcements')) {
+            abort(403, 'You do not have permission to view announcements.');
+        }
         // If user is admin, show admin view with edit/delete actions
         if (auth()->user()->isAdmin()) {
             $announcements = Announcement::with('creator')

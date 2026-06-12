@@ -6,11 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
     
     /**
      * The attributes that are mass assignable.
@@ -33,9 +34,7 @@ class User extends Authenticatable
         'baptism_date',
         'ministry_interest',
         'member_id',
-        'role_id',
         'member_status_id',
-        'permissions',
     ];
 
     /**
@@ -58,18 +57,21 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'permissions' => 'array',
         ];
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            if ($user->getRoleNames()->isEmpty()) {
+                $user->assignRoles('Member');
+            }
+        });
     }
 
     // -----------------------------------------------------
     // RELATIONSHIPS
     // -----------------------------------------------------
-
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
 
     public function memberStatus()
     {
@@ -87,17 +89,17 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->role_id === Role::ADMIN;
+        return $this->hasRole('Admin');
     }
 
     public function isPastor(): bool
     {
-        return $this->role_id === Role::PASTOR;
+        return $this->hasRole('Pastor');
     }
 
     public function isMember(): bool
     {
-        return $this->role_id === Role::MEMBER;
+        return $this->hasRole('Member');
     }
 
     // ---------------------------------------------------
@@ -114,18 +116,6 @@ class User extends Authenticatable
             return true;
         }
 
-        $permissions = $this->permissions ?? [];
-
-        return in_array($permission, $permissions);
-    }
-
-    public function can($ability, $arguments = []): bool
-    {
-        // Delegate to Laravel Gate Policies first, then fall back to the permission string stored on the user.
-        if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->has($ability)) {
-            return parent::can($ability, $arguments);
-        }
-
-        return $this->hasPermission($ability);
+        return $this->hasPermissionTo($permission);
     }
 }

@@ -35,10 +35,10 @@
                             <strong>{{ $user->name }}</strong>
                             <div style="color:#9ca3af;font-size:12px;margin-top:2px;">{{ $user->email }}</div>
                         </td>
-                        <td>{{ $user->role?->name ?? 'No role' }}</td>
+                        <td>{{ $user->roles->first()?->name ?? 'No role' }}</td>
                         <td>{{ $user->memberStatus?->name ?? 'No status' }}</td>
                         <td>
-                            @php $perms = $user->permissions ?? []; @endphp
+                            @php $perms = $user->getDirectPermissions()->pluck('name')->toArray(); @endphp
                             @if($user->isAdmin())
                                 <span style="background:#e0f2fe;color:#075985;font-size:12px;padding:2px 10px;border-radius:999px;font-weight:500;">
                                     Full access
@@ -47,7 +47,7 @@
                                 <div style="display:flex;flex-wrap:wrap;gap:6px;">
                                     @foreach($perms as $perm)
                                         <span style="background:#dcfce7;color:#166534;font-size:12px;padding:2px 10px;border-radius:999px;font-weight:500;">
-                                            {{ $available[$perm] ?? $perm }}
+                                            {{ $available[$perm] ?? ucwords(str_replace('_', ' ', $perm)) }}
                                         </span>
                                     @endforeach
                                 </div>
