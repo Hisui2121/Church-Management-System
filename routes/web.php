@@ -145,10 +145,12 @@ Route::middleware(['auth', 'role:Admin'])
         // Attendance
         Route::resource('attendance', AttendanceController::class)->only(['index', 'create', 'store']);
 
-        // Permissions
+        // Permissions (Role-based)
         Route::get('/permissions',              [UserPermissionController::class, 'index'])->name('permissions.index');
-        Route::get('/permissions/{user}/edit',  [UserPermissionController::class, 'edit'])->name('permissions.edit');
-        Route::put('/permissions/{user}',       [UserPermissionController::class, 'update'])->name('permissions.update');
+        Route::post('/permissions',             [UserPermissionController::class, 'store'])->name('permissions.store');
+        Route::get('/permissions/{role}/edit',  [UserPermissionController::class, 'edit'])->name('permissions.edit');
+        Route::put('/permissions/{role}',       [UserPermissionController::class, 'update'])->name('permissions.update');
+        Route::delete('/permissions/{role}',    [UserPermissionController::class, 'destroy'])->name('permissions.destroy');
 
         // Messages
         Route::get('/messages',                    [MessagesController::class, 'index'])->name('messages.index');
