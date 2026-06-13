@@ -20,7 +20,6 @@
                 <div class="h-1 flex-1 bg-[#468770] rounded-full"></div>
                 <div class="h-1 flex-1 bg-[#468770] rounded-full"></div>
                 <div class="h-1 flex-1 bg-[#468770] rounded-full"></div>
-                <div class="h-1 flex-1 bg-[#468770] rounded-full"></div>
             </div>
         </div>
 
@@ -66,7 +65,7 @@
                     </div>
                 </div>
             </div>
-
+<!-- 
             <div class="space-y-3 md:col-span-2 pt-4">
                 <h3 class="font-bold text-gray-800 border-b border-gray-100 pb-2 text-[15px]">Church Information</h3>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-[13px]">
@@ -88,11 +87,11 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <form action="/register/submit" method="POST" class="mt-12 pt-6 border-t border-gray-100 flex gap-4">
             @csrf
-            <a href="{{ route('register.church') }}" class="bg-[#e9eceb] hover:bg-gray-200 text-[#4a5551] text-[13px] font-semibold py-3 px-8 rounded-lg transition-colors flex items-center justify-center">
+            <a href="{{ route('register.personal') }}" class="bg-[#e9eceb] hover:bg-gray-200 text-[#4a5551] text-[13px] font-semibold py-3 px-8 rounded-lg transition-colors flex items-center justify-center">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Back
             </a>

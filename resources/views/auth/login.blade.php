@@ -15,7 +15,7 @@
     <main class="flex-grow flex items-center justify-center p-4">
         
         <div class="bg-white rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.08)] flex flex-col md:flex-row w-full max-w-[900px] overflow-hidden min-h-[500px]">
-           
+          
             <div class="md:w-[45%] relative bg-[#2A6B56] text-white px-10 pt-6 pb-10 flex flex-col justify-start">
                 <div class="absolute inset-0 z-0">
                     <img 

@@ -46,7 +46,6 @@
                     <div class="h-1 flex-1 bg-[#468770] rounded-full"></div>
                     <div class="h-1 flex-1 bg-[#468770] rounded-full"></div>
                     <div class="h-1 flex-1 bg-gray-200 rounded-full"></div>
-                    <div class="h-1 flex-1 bg-gray-200 rounded-full"></div>
                 </div>
             </div>
 
@@ -225,7 +224,7 @@
                 <div class="mt-auto pt-8 flex gap-4">
 
                     <a
-                        href="{{ route('register.account') }}"
+                        href="{{ route('register.review') }}"
                         class="flex-none bg-[#e9eceb] hover:bg-gray-200 text-[#4a5551] text-[13px] font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center"
                     >
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

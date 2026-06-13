@@ -34,9 +34,11 @@ class RegisterController extends Controller
         $fullName = $request->first_name . ' ' . $request->last_name;
 
         session([
-            'register.name'     => $fullName,
-            'register.email'    => $request->email,
-            'register.password' => bcrypt($request->password),
+            'register' => [
+                'name'     => $fullName,
+                'email'    => $request->email,
+                'password' => bcrypt($request->password),
+            ]
         ]);
 
         // Gagamit tayo ng Named Route para sa lipat-pahina (Best Practice)
@@ -51,8 +53,8 @@ class RegisterController extends Controller
 
     public function personalForm()
     {
-        if (!session('register.name')) {
-            return redirect('/register/account');
+        if (!session()->has('register')) {
+            return redirect()->route('register.account');
         }
         return view('auth.register.personal');
     }
@@ -81,7 +83,7 @@ class RegisterController extends Controller
 
         session(['register' => $registerData]);
 
-        return redirect()->route('register.church');
+        return redirect()->route('register.review');
     }
 
     /*
@@ -129,11 +131,7 @@ class RegisterController extends Controller
         $data = session('register');
 
         if (!$data) {
-            return redirect('/register/account');
-        }
-
-        if (!session('register.name')) {
-            return redirect('/register/account');
+            return redirect()->route('register.account');
         }
 
         return view('auth.register.review', compact('data'));
@@ -154,25 +152,20 @@ class RegisterController extends Controller
         }
 
         $user = User::create([
-            'name'               => $data['name'],
-            'email'              => $data['email'],
-            'password'           => $data['password'],
-            'city'               => $data['city'],
-            'barangay'           => $data['barangay'],
-            'street'             => $data['street'],
-            'houseNo'            => $data['houseNo']           ?? null,
-            'birthday'           => !empty($data['birthday'])
-                                        ? Carbon::parse($data['birthday'])->format('Y-m-d') : null,
-            'sex'                => $data['sex']               ?? null,
-            'phone'              => $data['phone']             ?? null,
-            'member_type'        => $data['member_type']       ?? null,
-            'baptism_status'     => $data['baptism_status']    ?? null,
-            'baptism_date'       => !empty($data['baptism_date'])
-                                        ? Carbon::parse($data['baptism_date'])->format('Y-m-d') : null,
-            'ministry_interest'  => $data['ministry_interest'] ?? null,
+            'name'      => $data['name'],
+            'email'     => $data['email'],
+            'password'  => $data['password'],
+        
+            'city'      => $data['city'],
+            'barangay'  => $data['barangay'],
+            'street'    => $data['street'],
+            'houseNo'   => $data['houseNo'] ?? null,
+            'birthday'  => $data['birthday'] ?? null,
+            'sex'       => $data['sex'] ?? null,
+            'phone'     => $data['phone'] ?? null,
         ]);
 
-        $user->assignRole('Member');
+        $user->assignRole('Guest');
 
         AuditLog::record(
             action:         'registered',

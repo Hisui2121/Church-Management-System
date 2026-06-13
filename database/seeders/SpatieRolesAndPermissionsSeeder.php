@@ -54,6 +54,15 @@ class SpatieRolesAndPermissionsSeeder extends Seeder
             'view_events',
         ]);
 
+        $guest = Role::firstOrCreate([
+            'name' => 'Guest',
+            'guard_name' => 'web'
+        ]);
+        
+        $guest->syncPermissions([
+            'view_announcements',
+        ]);
+
         // Backfill roles for existing seeded users without overwriting any role already assigned.
         $adminUser = User::where('email', 'admin@church.com')->first();
 
@@ -72,8 +81,10 @@ class SpatieRolesAndPermissionsSeeder extends Seeder
         // Everyone else becomes member
         User::where('email', '!=', 'admin@church.com')
             ->get()
-            ->each(function (User $user) use ($member): void {
-                    $user->syncRoles($member);
+            ->each(function (User $user) use ($guest): void {
+                if ($user->getRoleNames()->isEmpty()) {
+                    $user->assignRole($guest);
+                }
             });
     }
 }

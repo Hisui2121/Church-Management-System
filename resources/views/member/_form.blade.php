@@ -25,11 +25,11 @@
 
             <option value="">Select</option>
 
-            <option value="M" {{ old('gender', $member->gender ?? '') == 'M' ? 'selected' : '' }}>
+            <option value="Male" {{ old('gender', $member->gender ?? '') == 'Male' ? 'selected' : '' }}>
                 Male
             </option>
 
-            <option value="F" {{ old('gender', $member->gender ?? '') == 'F' ? 'selected' : '' }}>
+            <option value="Female" {{ old('gender', $member->gender ?? '') == 'Female' ? 'selected' : '' }}>
                 Female
             </option>
 

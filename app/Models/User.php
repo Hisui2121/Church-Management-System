@@ -64,7 +64,7 @@ class User extends Authenticatable
     {
         static::created(function ($user) {
             if ($user->getRoleNames()->isEmpty()) {
-                $user->assignRole('Member');
+                $user->assignRole('Guest');
             }
         });
     }

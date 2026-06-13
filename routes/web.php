@@ -31,12 +31,9 @@ Route::middleware('guest')->group(function () {
     Route::get('/register/account',  [RegisterController::class, 'accountForm'])->name('register.account');
     Route::post('/register/account', [RegisterController::class, 'saveAccount']);
 
-    Route::middleware('registration.step')->group(function () {
+    Route::group([], function () {
         Route::get('/register/personal',  [RegisterController::class, 'personalForm'])->name('register.personal');
         Route::post('/register/personal', [RegisterController::class, 'savePersonal']);
-
-        Route::get('/register/church',  [RegisterController::class, 'churchForm'])->name('register.church');
-        Route::post('/register/church', [RegisterController::class, 'saveChurch']);
 
         Route::get('/register/review',  [RegisterController::class, 'review'])->name('register.review');
         Route::post('/register/submit', [RegisterController::class, 'submit'])->name('register.submit');

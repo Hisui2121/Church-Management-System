@@ -45,10 +45,9 @@
         <div class="md:w-[60%] py-10 px-12 flex flex-col">
             
             <div class="mb-8">
-                <p class="text-[10px] font-bold text-[#468770] uppercase tracking-wider mb-2">Step 1 of 4</p>
+                <p class="text-[10px] font-bold text-[#468770] uppercase tracking-wider mb-2">Step 1 of 3</p>
                 <div class="flex gap-2">
                     <div class="h-1 flex-1 bg-[#468770] rounded-full"></div>
-                    <div class="h-1 flex-1 bg-gray-200 rounded-full"></div>
                     <div class="h-1 flex-1 bg-gray-200 rounded-full"></div>
                     <div class="h-1 flex-1 bg-gray-200 rounded-full"></div>
                 </div>
