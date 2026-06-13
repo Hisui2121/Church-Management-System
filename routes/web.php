@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AnnouncementsController;
 use App\Http\Controllers\Admin\AttendanceController;
+use App\Http\Controllers\Admin\AttendanceReportController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EventsController;
@@ -10,14 +11,17 @@ use App\Http\Controllers\Admin\MembersExportController;
 use App\Http\Controllers\Admin\MessagesController;
 use App\Http\Controllers\Admin\MinistriesController;
 use App\Http\Controllers\Admin\OrdersController;
+use App\Http\Controllers\Admin\ServiceSessionsController;
 use App\Http\Controllers\Admin\UserPermissionController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HelloController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 // ── Landing / redirect ────────────────────────────────────────────────────────
@@ -37,11 +41,21 @@ Route::middleware('guest')->group(function () {
 
         Route::get('/register/review',  [RegisterController::class, 'review'])->name('register.review');
         Route::post('/register/submit', [RegisterController::class, 'submit'])->name('register.submit');
+
+        // Legacy route redirect for removed church step
+        Route::get('/register/church', fn() => redirect()->route('register.personal'))->name('register.church');
+        Route::post('/register/church', fn() => redirect()->route('register.review'));
     });
 
     // Login
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])->name('password.update');
+
     Route::get('/login',  [LoginController::class, 'create'])->name('login');
     Route::post('/login', [LoginController::class, 'store'])->middleware('throttle:5,1');
+
 });
 
 // ── Authenticated routes ──────────────────────────────────────────────────────
@@ -52,6 +66,9 @@ Route::middleware('auth')->group(function () {
     // Profile & Settings pages (simple placeholders)
     Route::get('/profile', function () { return view('profile'); })->name('profile');
     Route::get('/settings', function () { return view('settings'); })->name('settings');
+
+    // Search
+    Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 
     // Member dashboard & check-in
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
@@ -79,8 +96,9 @@ Route::middleware(['auth', 'role:Admin'])
     ->name('admin.')
     ->group(function () {
 
-        // Dashboard
+       // Dashboard
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::post('/session/toggle', [AdminDashboardController::class, 'toggleSession'])->name('session.toggle');
 
         // Members
         Route::get('/members',               [AdminMembersController::class, 'index'])->name('members.index');
@@ -141,6 +159,24 @@ Route::middleware(['auth', 'role:Admin'])
 
         // Attendance
         Route::resource('attendance', AttendanceController::class)->only(['index', 'create', 'store']);
+
+        // Service Sessions
+        Route::prefix('attendance/sessions')->name('attendance.sessions.')->group(function () {
+            Route::get('/', [ServiceSessionsController::class, 'index'])->name('index');
+            Route::get('/create', [ServiceSessionsController::class, 'create'])->name('create');
+            Route::post('/', [ServiceSessionsController::class, 'store'])->name('store');
+            Route::get('/{session}/edit', [ServiceSessionsController::class, 'edit'])->name('edit');
+            Route::put('/{session}', [ServiceSessionsController::class, 'update'])->name('update');
+            Route::delete('/{session}', [ServiceSessionsController::class, 'destroy'])->name('destroy');
+        });
+
+        // Attendance Reports
+        Route::prefix('attendance/reports')->name('attendance.reports.')->group(function () {
+            Route::get('/', [AttendanceReportController::class, 'index'])->name('index');
+            Route::get('/export-csv', [AttendanceReportController::class, 'exportCSV'])->name('export-csv');
+            Route::get('/export-excel', [AttendanceReportController::class, 'exportExcel'])->name('export-excel');
+            Route::get('/export-pdf', [AttendanceReportController::class, 'exportPDF'])->name('export-pdf');
+        });
 
         // Permissions (Role-based)
         Route::get('/permissions',              [UserPermissionController::class, 'index'])->name('permissions.index');

@@ -81,18 +81,16 @@
                         </td>
                         <td>
                             @php
-                                $statusName = $member->memberStatus?->name ?? 'No Status';
-                                $statusClass = match($statusName) {
-                                    'Active' => 'active',
-                                    'Inactive' => 'inactive',
-                                    'Visitor' => 'visitor',
-                                    default => 'pending'
-                                };
+                                $lastAttend = \App\Models\Attendance::where(function($q) use ($member) {
+                                    $q->where('member_id', $member->member?->id ?? 0)
+                                      ->orWhere('user_id', $member->id);
+                                })->latest('date')->first();
                             @endphp
-                            <div class="status-indicator">
-                                <span class="status-dot {{ $statusClass }}"></span>
-                                <span class="status-text">{{ $statusName }}</span>
-                            </div>
+                            @if($lastAttend)
+                                <a href="{{ route('admin.members.show', $member->id) }}" class="text-sm text-primary">{{ $lastAttend->date->format('M d, Y') }}</a>
+                            @else
+                                <span class="text-sm text-muted">No records</span>
+                            @endif
                         </td>
                         <td>{{ $member->date_joined ? $member->date_joined : $member->created_at->format('M d, Y') }}</td>
                         <td>

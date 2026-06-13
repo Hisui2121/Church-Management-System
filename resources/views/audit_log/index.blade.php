@@ -27,9 +27,9 @@
 
     {{-- Filters --}}
     <div class="filter-card">
-        @php
+            @php
             $selectedActions = $filters['action'] ?? [];
-            $selectedTables = $filters['table_name'] ?? [];
+            $selectedPages = $filters['page'] ?? [];
         @endphp
 
         <form method="GET" action="{{ route('audit_logs.index') }}" class="filter-form" id="auditFilterForm">
@@ -64,14 +64,14 @@
             <div class="filter-group">
                 <details class="checkbox-dropdown">
                     <summary>
-                        <span>{{ count($selectedTables) ? count($selectedTables) . ' Tables' : 'All Tables' }}</span>
+                        <span>{{ count($selectedPages) ? count($selectedPages) . ' Pages' : 'All Pages' }}</span>
                         <i class="bi bi-chevron-down"></i>
                     </summary>
                     <div class="checkbox-menu">
-                        @foreach ($tableNames as $table)
+                        @foreach ($pages as $page)
                             <label class="checkbox-option">
-                                <input type="checkbox" name="table_name[]" value="{{ $table }}" @checked(in_array($table, $selectedTables, true))>
-                                <span>{{ $table }}</span>
+                                <input type="checkbox" name="page[]" value="{{ $page }}" @checked(in_array($page, $selectedPages, true))>
+                                <span>{{ $page }}</span>
                             </label>
                         @endforeach
                     </div>
@@ -86,24 +86,33 @@
         <table class="table-dark">
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>User</th>
+                    <th>No.</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Page</th>
                     <th>Action</th>
-                    <th>Table</th>
-                    <th>Record ID</th>
                     <th>Description</th>
                     <th>Date & Time</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($logs as $log)
                     <tr>
-                        <td class="text-muted small">{{ $log->id }}</td>
+                        <td class="text-muted small">{{ ($logs->currentPage() - 1) * $logs->perPage() + $loop->iteration }}</td>
 
                         <td>
                             {{ $log->user?->name ?? 'System' }}
                         </td>
+
+                        <td>
+                            @if($log->user && $log->user->getRoleNames()->count() > 0)
+                                <span class="badge badge-info">{{ $log->user->getRoleNames()->first() }}</span>
+                            @else
+                                <span class="text-muted">—</span>
+                            @endif
+                        </td>
+
+                        <td class="small text-muted">{{ $log->page ?? '-' }}</td>
 
                         <td>
                             @php
@@ -144,16 +153,6 @@
                             </span>
                         </td>
 
-                        <td>
-                            <span class="badge badge-light">
-                                {{ $log->table_name }}
-                            </span>
-                        </td>
-
-                        <td class="text-muted small">
-                            {{ $log->record_id ?? '—' }}
-                        </td>
-
                         <td class="small">
                             {{ Str::limit($log->description, 60) }}
                         </td>
@@ -161,16 +160,10 @@
                         <td class="small text-muted">
                             {{ $log->created_at->format('M d, Y h:i A') }}
                         </td>
-
-                        <td>
-                            <a href="{{ route('audit_logs.show', $log) }}" class="btn btn-sm btn-primary">
-                                View
-                            </a>
-                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" style="text-align: center; color: #999; padding: 40px;">
+                        <td colspan="7" style="text-align: center; color: #999; padding: 40px;">
                             No audit logs found.
                         </td>
                     </tr>

@@ -2,7 +2,7 @@
     <div class="carousel-wrapper">
         <div class="carousel" id="bannerCarousel">
             @forelse ($banners as $banner)
-            <div class="carousel-slide" style="background-image: url({{ asset('storage/' . $banner->image_path) }})"></div>
+            <div class="carousel-slide" style="background-image: url({{ asset('storage/' . $banner->image_path) }}); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
             @empty
             <div class="carousel-slide carousel-empty">
                 <div class="carousel-overlay">

@@ -167,12 +167,13 @@ class RegisterController extends Controller
 
         $user->assignRole('Guest');
 
-        AuditLog::record(
-            action:         'registered',
-            tableName:      'users',
-            recordId:       $user->id,
-            description:    "New user registered: {$user->name}"
-        );
+            AuditLog::record(
+                action:         'Created',
+                tableName:      'users',
+                recordId:       $user->id,
+                description:    "New user registered: {$user->name}",
+                page:           'Auth'
+            );
 
         // Burahin ang registration session cache dahil save na sa DB
         session()->forget('register');

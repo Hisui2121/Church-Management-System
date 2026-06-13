@@ -10,30 +10,33 @@ class MinistryObserver
     public function created(Ministry $ministry): void
     {
         AuditLog::record(
-            'created',
+            'Created',
             'ministries',
             $ministry->id,
-            "Ministry added: {$ministry->name}"
+            "Ministry added: {$ministry->name}",
+            'Ministries'
         );
     }
 
     public function updated(Ministry $ministry): void
     {
         AuditLog::record(
-            'updated',
+            'Updated',
             'ministries',
             $ministry->id,
-            "Ministry updated: {$ministry->name}"
+            "Ministry updated: {$ministry->name}",
+            'Ministries'
         );
     }
 
     public function deleted(Ministry $ministry): void
     {
         AuditLog::record(
-            'deleted',
+            'Deleted',
             'ministries',
             $ministry->id,
-            "Ministry deleted: {$ministry->name}"
+            "Ministry deleted: {$ministry->name}",
+            'Ministries'
         );
     }
 }

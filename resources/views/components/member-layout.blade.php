@@ -120,7 +120,7 @@
             {{-- SIDEBAR BOTTOM --}}
             <div class="sidebar-bottom">
                 <div class="user-profile-mini">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ auth()->user()->name }}" alt="Avatar" class="avatar-small">
+                    <div class="avatar-small bg-gray-300 flex items-center justify-center text-gray-600" style="width: 32px; height: 32px; border-radius: 50%;"><i class="bi bi-person"></i></div>
                     <div class="user-info-mini">
                         <div class="user-name-mini">{{ auth()->user()->name }}</div>
                         <div class="user-role-mini">{{ auth()->user()->memberStatus?->name ?? 'Member' }}</div>
@@ -138,31 +138,15 @@
                 </div>
 
                 <div class="topbar-right">
-                    {{-- SEARCH --}}
-                    <div class="search-box">
-                        <i class="bi bi-search"></i>
-                        <input type="text" placeholder="Search...">
-                    </div>
-
-                    {{-- NOTIFICATIONS --}}
-                    <button class="topbar-btn" title="Notifications">
-                        <i class="bi bi-bell-fill"></i>
-                        <span class="notification-badge">3</span>
-                    </button>
-
                     {{-- USER MENU --}}
                     <div class="user-menu">
                         <button class="user-menu-btn" id="userMenuBtn">
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ auth()->user()->name }}" alt="Avatar" class="avatar">
-                            <span class="user-name-short">{{ substr(auth()->user()->name, 0, 1) }}</span>
+                            <div class="avatar bg-gray-300 flex items-center justify-center text-gray-600" style="width: 48px; height: 48px; border-radius: 50%; font-size: 24px;"><i class="bi bi-person-fill"></i></div>
                         </button>
 
                         <div class="user-menu-dropdown" id="userMenuDropdown">
-                            <a href="#" class="dropdown-item">
+                            <a href="{{ route('profile') }}" class="dropdown-item">
                                 <i class="bi bi-person-fill"></i> Profile
-                            </a>
-                            <a href="#" class="dropdown-item">
-                                <i class="bi bi-gear-fill"></i> Settings
                             </a>
                             <hr class="dropdown-divider">
                             <form action="{{ route('logout') }}" method="POST" class="dropdown-item-form">

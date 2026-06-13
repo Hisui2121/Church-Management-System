@@ -15,7 +15,7 @@
     <main class="bg-white rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.08)] flex flex-col w-full max-w-[950px] p-12 min-h-[550px]">
         
         <div class="mb-8 w-full">
-            <p class="text-[10px] font-bold text-[#468770] uppercase tracking-wider mb-2">Step 4 of 4</p>
+            <p class="text-[10px] font-bold text-[#468770] uppercase tracking-wider mb-2">Step 3 of 3</p>
             <div class="flex gap-2">
                 <div class="h-1 flex-1 bg-[#468770] rounded-full"></div>
                 <div class="h-1 flex-1 bg-[#468770] rounded-full"></div>

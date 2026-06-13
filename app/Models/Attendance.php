@@ -11,14 +11,18 @@ class Attendance extends Model
 
     protected $fillable = [
         'member_id',
+        'user_id',
+        'service_session_id',
         'service_id',
         'date',
+        'checked_in_at',
         'is_present',
         'recorded_by',
     ];
 
     protected $casts = [
         'date' => 'date',
+        'checked_in_at' => 'datetime',
         'is_present' => 'boolean',
     ];
 
@@ -35,6 +39,16 @@ class Attendance extends Model
     public function service()
     {
         return $this->belongsTo(Service::class);
+    }
+
+    public function serviceSession()
+    {
+        return $this->belongsTo(ServiceSession::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function recordedBy()

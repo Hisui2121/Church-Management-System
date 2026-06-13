@@ -10,30 +10,33 @@ class AnnouncementObserver
     public function created(Announcement $announcement): void
     {
         AuditLog::record(
-            'created',
+            'Created',
             'announcements',
             $announcement->id,
-            "Announcement added: {$announcement->title}"
+            "Announcement added: {$announcement->title}",
+            'Announcements'
         );
     }
 
     public function updated(Announcement $announcement): void
     {
         AuditLog::record(
-            'updated',
+            'Updated',
             'announcements',
             $announcement->id,
-            "Announcement updated: {$announcement->title}"
+            "Announcement updated: {$announcement->title}",
+            'Announcements'
         );
     }
 
     public function deleted(Announcement $announcement): void
     {
         AuditLog::record(
-            'deleted',
+            'Deleted',
             'announcements',
             $announcement->id,
-            "Announcement deleted: {$announcement->title}"
+            "Announcement deleted: {$announcement->title}",
+            'Announcements'
         );
     }
 }

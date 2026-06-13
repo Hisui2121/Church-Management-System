@@ -25,9 +25,25 @@ class SpatieRolesAndPermissionsSeeder extends Seeder
             'edit_members',
             'delete_members',
             'view_ministries',
+            'create_ministries',
+            'edit_ministries',
+            'delete_ministries',
             'view_events',
+            'create_events',
+            'edit_events',
+            'delete_events',
             'view_announcements',
+            'create_announcements',
+            'edit_announcements',
+            'delete_announcements',
             'view_audit_logs',
+            'delete_audit_logs',
+            'view_attendance',
+            'create_attendance',
+            'view_system_users',
+            'create_system_users',
+            'edit_system_users',
+            'delete_system_users',
         ];
 
         foreach ($permissions as $permission) {
@@ -44,7 +60,13 @@ class SpatieRolesAndPermissionsSeeder extends Seeder
             'view_members',
             'view_ministries',
             'view_events',
+            'create_events',
+            'edit_events',
             'view_announcements',
+            'create_announcements',
+            'edit_announcements',
+            'view_attendance',
+            'view_audit_logs',
         ]);
 
         $member = Role::firstOrCreate(['name' => 'Member', 'guard_name' => 'web']);

@@ -70,4 +70,25 @@ class Member extends Model
     {
         return "{$this->first_name} {$this->last_name}";
     }
+
+    public function memberType()
+    {
+        return $this->belongsTo(MemberType::class, 'member_type_id');
+    }
+
+    /**
+     * Get the member's primary ministry role
+     */
+    public function getPrimaryRoleAttribute()
+    {
+        return $this->ministries()->first()?->pivot?->role ?? null;
+    }
+
+    /**
+     * Get comma-separated ministry names
+     */
+    public function getMinistryNamesAttribute()
+    {
+        return $this->ministries->pluck('name')->join(', ') ?: '—';
+    }
 }

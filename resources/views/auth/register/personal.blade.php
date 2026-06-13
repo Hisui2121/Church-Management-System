@@ -41,7 +41,7 @@
         <div class="md:w-[60%] py-10 px-12 flex flex-col">
            
             <div class="mb-8">
-                <p class="text-[10px] font-bold text-[#468770] uppercase tracking-wider mb-2">Step 2 of 4</p>
+                <p class="text-[10px] font-bold text-[#468770] uppercase tracking-wider mb-2">Step 2 of 3</p>
                 <div class="flex gap-2">
                     <div class="h-1 flex-1 bg-[#468770] rounded-full"></div>
                     <div class="h-1 flex-1 bg-[#468770] rounded-full"></div>
@@ -224,7 +224,7 @@
                 <div class="mt-auto pt-8 flex gap-4">
 
                     <a
-                        href="{{ route('register.review') }}"
+                        href="{{ route('register.account') }}"
                         class="flex-none bg-[#e9eceb] hover:bg-gray-200 text-[#4a5551] text-[13px] font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center"
                     >
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

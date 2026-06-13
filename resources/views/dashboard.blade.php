@@ -12,23 +12,13 @@
             
             <div class="main-section">
                 {{-- NEW: Include the Attendance Check-in Widget --}}
-                @include('partials.attendance-widget')
+                @include('partials.check-in-widget')
 
                 {{-- Injecting the Main Feed Component --}}
                 @include('partials.main-feed')
             </div>
 
             {{-- Injecting the Sidebar Component --}}
-            @include('partials.calendar-sidebar')
-
-        </div>
-
-        <div class="dashboard-grid">
-            
-            {{-- Injecting the Main Feed --}}
-            @include('partials.main-feed')
-
-            {{-- Injecting the Sidebar --}}
             @include('partials.calendar-sidebar')
 
         </div>

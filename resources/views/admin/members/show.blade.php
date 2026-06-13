@@ -10,7 +10,7 @@
 
         <div class="member-header">
             <div class="member-avatar-section">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ $member->name }}" alt="Avatar" class="member-avatar">
+                <div class="member-avatar bg-gray-300 flex items-center justify-center text-gray-600" style="width: 120px; height: 120px; border-radius: 50%; font-size: 48px;"><i class="bi bi-person-fill"></i></div>
                 <div class="member-info">
                     <h1 class="member-name">{{ $member->name }}</h1>
                     <p class="member-role">{{ $member->getRoleNames()->first() ?? 'Member' }}</p>
@@ -110,6 +110,43 @@
                         <span>{{ $member->ministry_interest ?? '-' }}</span>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="card mt-6">
+            <div class="card-header">
+                <h3 class="card-title">Attendance Records</h3>
+            </div>
+            <div class="detail-list">
+                @if(isset($attendances) && $attendances->count())
+                    <div class="member-attendance-cards" style="margin-top: 10px; display:grid; gap:16px;">
+                        @foreach($attendances as $a)
+                            <div class="member-attendance-card" style="background:#ffffff; border:1px solid #e5e7eb; border-radius:16px; padding:18px; display:grid; grid-template-columns:1fr; gap:12px;">
+                                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px,1fr)); gap:16px;">
+                                    <div>
+                                        <div class="attendance-label">Date</div>
+                                        <div class="attendance-value">{{ $a->date?->format('M d, Y') ?? 'N/A' }}</div>
+                                    </div>
+                                    <div>
+                                        <div class="attendance-label">Service</div>
+                                        <div class="attendance-value">{{ $a->service?->name ?? $a->serviceSession?->service_title ?? 'N/A' }}</div>
+                                    </div>
+                                    <div>
+                                        <div class="attendance-label">Status</div>
+                                        <div class="attendance-value">{{ $a->is_present ? 'Present' : 'Absent' }}</div>
+                                    </div>
+                                    <div>
+                                        <div class="attendance-label">Time</div>
+                                        <div class="attendance-value">{{ $a->checked_in_at?->format('h:i A') ?? '-' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div style="margin-top:10px;">{{ $attendances->links() }}</div>
+                @else
+                    <div class="empty-state" style="padding:20px;">No attendance records found for this member.</div>
+                @endif
             </div>
         </div>
     </div>

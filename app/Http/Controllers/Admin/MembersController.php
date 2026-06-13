@@ -98,9 +98,15 @@ class MembersController extends Controller
     public function show($id): View
     {
         $member = \App\Models\User::findOrFail($id);
+        $attendances = \App\Models\Attendance::where(function($q) use ($member) {
+            $q->where('member_id', $member->member?->id ?? 0)
+              ->orWhere('user_id', $member->id);
+        })->latest('date')->paginate(20);
+
         return view('admin.members.show', [
             'title' => 'Member Details',
             'member' => $member,
+            'attendances' => $attendances,
         ]);
     }
 

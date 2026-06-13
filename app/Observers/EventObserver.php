@@ -10,30 +10,33 @@ class EventObserver
     public function created(Event $event): void
     {
         AuditLog::record(
-            'created',
+            'Created',
             'events',
             $event->id,
-            "Event added: {$event->name}"
+            "Event added: {$event->name}",
+            'Events'
         );
     }
 
     public function updated(Event $event): void
     {
         AuditLog::record(
-            'updated',
+            'Updated',
             'events',
             $event->id,
-            "Event updated: {$event->name}"
+            "Event updated: {$event->name}",
+            'Events'
         );
     }
 
     public function deleted(Event $event): void
     {
         AuditLog::record(
-            'deleted',
+            'Deleted',
             'events',
             $event->id,
-            "Event deleted: {$event->name}"
+            "Event deleted: {$event->name}",
+            'Events'
         );
     }
 }

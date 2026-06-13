@@ -10,30 +10,33 @@ class UserObserver
     public function created(User $user): void
     {
         AuditLog::record(
-            'created',
+            'Created',
             'users',
             $user->id,
-            "Member added: {$user->name}"
+            "Member added: {$user->name}",
+            'Members'
         );
     }
 
     public function updated(User $user): void
     {
         AuditLog::record(
-            'updated',
+            'Updated',
             'users',
             $user->id,
-            "Member updated: {$user->name}"
+            "Member updated: {$user->name}",
+            'Members'
         );
     }
 
     public function deleted(User $user): void
     {
         AuditLog::record(
-            'deleted',
+            'Deleted',
             'users',
             $user->id,
-            "Member deleted: {$user->name}"
+            "Member deleted: {$user->name}",
+            'Members'
         );
     }
 }

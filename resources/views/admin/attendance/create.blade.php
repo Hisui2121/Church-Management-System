@@ -4,6 +4,15 @@
         
         <form action="{{ route('admin.attendance.store') }}" method="POST">
             @csrf
+            <input type="hidden" name="service_session_id" value="{{ $activeSession->id }}">
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700">Service Session</label>
+                <div class="mt-1 rounded-md border border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-700">
+                    {{ $activeSession->service_title ?? 'Service' }} — {{ $activeSession->session_date?->format('F d, Y h:i A') ?? 'No date set' }}
+                </div>
+            </div>
+
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700">Select Member</label>
                 <select name="member_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
@@ -14,20 +23,6 @@
                 @error('member_id')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700">Select Service/Event</label>
-                <select name="service_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                    @foreach($services as $service)
-                        <option value="{{ $service->id }}">{{ $service->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700">Date</label>
-                <input type="date" name="date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
             </div>
 
             <div class="mb-6">

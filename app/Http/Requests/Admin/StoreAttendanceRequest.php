@@ -21,10 +21,9 @@ class StoreAttendanceRequest extends FormRequest
                 'exists:members,id',
                 Rule::unique('attendances')->where(fn ($query) => $query
                     ->where('member_id', $this->input('member_id'))
-                    ->where('date', $this->input('date'))),
+                    ->where('service_session_id', $this->input('service_session_id'))),
             ],
-            'service_id' => ['required', 'integer', 'exists:services,id'],
-            'date' => ['required', 'date'],
+            'service_session_id' => ['required', 'integer', 'exists:service_sessions,id'],
             'status' => ['required', Rule::in(['Present', 'Absent'])],
         ];
     }

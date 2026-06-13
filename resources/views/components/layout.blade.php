@@ -99,15 +99,6 @@
                     </a>
                     @endif
 
-                    {{-- SETTINGS --}}
-                    <a
-                        href="#"
-                        class="{{ request()->is('settings*') ? 'active' : '' }}"
-                    >
-                        <i class="bi bi-gear-fill"></i>
-                        <span>Settings</span>
-                    </a>
-
                     @if (auth()->user()->isAdmin())
                     <a
                         href="{{ route('admin.member-statuses.index') }}"

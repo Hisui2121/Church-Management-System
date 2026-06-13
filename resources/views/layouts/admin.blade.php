@@ -75,16 +75,13 @@
                     {{-- USER MENU --}}
                     <div class="user-menu">
                         <button class="user-menu-btn" id="userMenuBtn">
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ urlencode(auth()->user()->name) }}" alt="Avatar" class="avatar">
+                            <div class="avatar bg-gray-300 flex items-center justify-center text-gray-600" style="width: 48px; height: 48px; border-radius: 50%; font-size: 24px;"><i class="bi bi-person-fill"></i></div>
                             <span class="user-name-short">{{ substr(auth()->user()->name, 0, 1) }}</span>
                         </button>
 
                         <div class="user-menu-dropdown" id="userMenuDropdown">
-                            <a href="#" class="dropdown-item">
+                            <a href="{{ route('profile') }}" class="dropdown-item">
                                 <i class="bi bi-person-fill"></i> Profile
-                            </a>
-                            <a href="#" class="dropdown-item">
-                                <i class="bi bi-gear-fill"></i> Settings
                             </a>
                             <hr class="dropdown-divider">
                             <form action="{{ route('logout') }}" method="POST" class="dropdown-item-form">

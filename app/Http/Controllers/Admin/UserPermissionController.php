@@ -23,6 +23,10 @@ class UserPermissionController extends Controller
 
     public function edit(Role $role)
     {
+        // Ensure dashboard view permissions exist
+        Permission::firstOrCreate(['name' => 'view_member_dashboard', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'view_admin_dashboard', 'guard_name' => 'web']);
+
         $available = Permission::all()->pluck('name', 'name')->toArray();
 
         $actionLabels = [
@@ -110,6 +114,7 @@ class UserPermissionController extends Controller
 
     public function destroy(Role $role)
     {
+        // Protect core system roles from deletion
         if (in_array($role->name, ['Admin', 'Pastor', 'Member'])) {
             return redirect()
                 ->route('admin.permissions.index')
@@ -129,6 +134,6 @@ class UserPermissionController extends Controller
 
         return redirect()
             ->route('admin.permissions.index')
-            ->with('success', "Role \"{$roleName}\" deleted.");
+            ->with('success', "Role \"{$roleName}\" deleted successfully.");
     }
 }

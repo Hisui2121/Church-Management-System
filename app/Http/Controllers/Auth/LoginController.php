@@ -23,17 +23,19 @@ class LoginController extends Controller
             'password' => ['required']
         ]);
 
-        if (Auth::attempt($credentials)) {
+        $remember = $request->boolean('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
 
             $request->session()->regenerate();
 
             AuditLog::record(
-                action:         'login',
+                action:         'Login',
                 tableName:      'users',
                 recordId:       Auth::id(),
-                description:    'User logged in: ' . Auth::user()->name 
+                description:    'User logged in: ' . Auth::user()->name,
+                page:           'Auth'
             );
-
             $dashboardRoute = Auth::user()->isAdmin()
                 ? 'admin.dashboard'
                 : 'user.dashboard';

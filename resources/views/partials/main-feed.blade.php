@@ -15,11 +15,13 @@
                     <img src="{{ asset('storage/' . $announcement->image_path) }}" alt="{{ $announcement->title }}">
                 </div>
                 @endif
+                @unless ($announcement->image_path)
                 <div class="announcement-content">
                     <h4 class="announcement-title">{{ $announcement->title }}</h4>
                     <p class="announcement-date"><i class="bi bi-calendar3"></i> {{ $announcement->published_at?->format('M d, Y') ?? $announcement->created_at->format('M d, Y') }}</p>
                     <p class="announcement-excerpt">{{ Str::limit(strip_tags($announcement->body), 100) }}</p>
                 </div>
+                @endunless
             </div>
             @empty
             <div class="empty-state">

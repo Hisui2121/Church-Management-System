@@ -79,17 +79,17 @@
                     <div class="flex gap-4">
                         <div class="flex-1 relative">
                             <label class="block text-xs font-bold text-gray-800 mb-1.5">Password</label>
-                            <input type="password" name="password" placeholder="Min. 8 Characters" class="w-full bg-[#f3f4f6] text-[13px] text-gray-900 rounded-lg pl-4 pr-10 py-3 focus:outline-none focus:ring-1 focus:ring-[#468770] border-none" required>
-                            <span class="absolute inset-y-0 right-0 top-6 flex items-center pr-3.5 text-gray-400 cursor-pointer">
+                            <input id="regPassword" type="password" name="password" placeholder="Min. 8 Characters" class="w-full bg-[#f3f4f6] text-[13px] text-gray-900 rounded-lg pl-4 pr-10 py-3 focus:outline-none focus:ring-1 focus:ring-[#468770] border-none" required>
+                            <button type="button" id="toggleRegPassword" class="absolute inset-y-0 right-0 top-6 flex items-center pr-3.5 text-gray-400">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                            </span>
+                            </button>
                         </div>
                         <div class="flex-1 relative">
                             <label class="block text-xs font-bold text-gray-800 mb-1.5">Confirm Password</label>
-                            <input type="password" name="password_confirmation" placeholder="Min. 8 Characters" class="w-full bg-[#f3f4f6] text-[13px] text-gray-900 rounded-lg pl-4 pr-10 py-3 focus:outline-none focus:ring-1 focus:ring-[#468770] border-none" required>
-                            <span class="absolute inset-y-0 right-0 top-6 flex items-center pr-3.5 text-gray-400 cursor-pointer">
+                            <input id="regPasswordConfirm" type="password" name="password_confirmation" placeholder="Min. 8 Characters" class="w-full bg-[#f3f4f6] text-[13px] text-gray-900 rounded-lg pl-4 pr-10 py-3 focus:outline-none focus:ring-1 focus:ring-[#468770] border-none" required>
+                            <button type="button" id="toggleRegPasswordConfirm" class="absolute inset-y-0 right-0 top-6 flex items-center pr-3.5 text-gray-400">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                            </span>
+                            </button>
                         </div>
                     </div>
 
@@ -119,4 +119,15 @@
     </main>
 
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggle = document.getElementById('toggleRegPassword');
+        const input = document.getElementById('regPassword');
+        if (toggle && input) toggle.addEventListener('click', () => input.type = input.type === 'password' ? 'text' : 'password');
+
+        const toggle2 = document.getElementById('toggleRegPasswordConfirm');
+        const input2 = document.getElementById('regPasswordConfirm');
+        if (toggle2 && input2) toggle2.addEventListener('click', () => input2.type = input2.type === 'password' ? 'text' : 'password');
+    });
+</script>
 </html>

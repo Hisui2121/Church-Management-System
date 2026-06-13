@@ -75,7 +75,7 @@
 
     <div class="sidebar-bottom">
         <div class="user-profile-mini">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ urlencode(auth()->user()->name) }}" alt="Avatar" class="avatar-small">
+            <div class="avatar-small bg-gray-300 flex items-center justify-center text-gray-600" style="width: 32px; height: 32px; border-radius: 50%;"><i class="bi bi-person"></i></div>
             <div class="user-info-mini">
                 <div class="user-name-mini">{{ auth()->user()->name }}</div>
                 <div class="user-role-mini">{{ auth()->user()->roles->first()?->name ?? 'User' }}</div>
