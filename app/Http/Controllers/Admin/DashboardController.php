@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Ministry;
 use App\Models\Announcement;
+use App\Models\Attendance;
 use App\Models\auditLog;
 use Illuminate\View\View;
 
@@ -20,9 +21,10 @@ class DashboardController extends Controller
         $totalMembers = User::count();
         $totalMinistries = Ministry::count();
         $activeAnnouncements = Announcement::where('is_active', true)->count();
+        $totalAttendance = Attendance::count();
         
         // Get recent members for the Heroes' Members table
-        $heroesMembers = User::with('memberStatus')
+        $heroesMembers = User::with(['memberStatus', 'roles', 'member.ministries'])
             ->latest()
             ->limit(10)
             ->get();
@@ -43,6 +45,7 @@ class DashboardController extends Controller
             'totalMembers' => $totalMembers,
             'totalMinistries' => $totalMinistries,
             'activeAnnouncements' => $activeAnnouncements,
+            'totalAttendance' => $totalAttendance,
             'heroesMembers' => $heroesMembers,
             'announcements' => $announcements,
             'activityLog' => $activityLog,

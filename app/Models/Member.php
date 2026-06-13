@@ -51,6 +51,18 @@ class Member extends Model
         return $this->belongsTo(MemberStatus::class);
     }
 
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
+
+    public function ministries()
+    {
+        return $this->belongsToMany(Ministry::class, 'member_ministries')
+            ->withPivot(['joined_at', 'role'])
+            ->withTimestamps();
+    }
+
     /**
      * Get full name
      */

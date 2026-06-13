@@ -161,10 +161,10 @@ class ChurchManagementSeeder extends Seeder
         // MEMBER_MINISTRIES
         // ------------------------------------------------------------
         DB::table('member_ministries')->insert([
-            ['member_id' => 1, 'ministry_id' => 4, 'joined_at' => '2018-05-01', 'role' => 'Media Operator', 'created_at' => now(), 'updated_at' => now()],
-            ['member_id' => 2, 'ministry_id' => 1, 'joined_at' => '2019-07-01', 'role' => 'Vocalist',       'created_at' => now(), 'updated_at' => now()],
-            ['member_id' => 3, 'ministry_id' => 3, 'joined_at' => '2020-04-01', 'role' => 'Volunteer',      'created_at' => now(), 'updated_at' => now()],
-            ['member_id' => 4, 'ministry_id' => 2, 'joined_at' => '2024-12-15', 'role' => 'Youth Member',   'created_at' => now(), 'updated_at' => now()],
+            ['member_id' => 1, 'ministry_id' => 4, 'joined_at' => '2018-05-01', 'role' => 'Leader', 'created_at' => now(), 'updated_at' => now()],
+            ['member_id' => 2, 'ministry_id' => 1, 'joined_at' => '2019-07-01', 'role' => 'Member', 'created_at' => now(), 'updated_at' => now()],
+            ['member_id' => 3, 'ministry_id' => 3, 'joined_at' => '2020-04-01', 'role' => 'Member', 'created_at' => now(), 'updated_at' => now()],
+            ['member_id' => 4, 'ministry_id' => 2, 'joined_at' => '2024-12-15', 'role' => 'Member', 'created_at' => now(), 'updated_at' => now()],
         ]);
 
         // ------------------------------------------------------------

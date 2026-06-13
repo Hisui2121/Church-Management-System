@@ -24,6 +24,8 @@ class Ministry extends Model
      */
     public function members()
     {
-        return $this->belongsToMany(Member::class, 'member_ministries');
+        return $this->belongsToMany(Member::class, 'member_ministries')
+            ->withPivot(['joined_at', 'role'])
+            ->withTimestamps();
     }
 }

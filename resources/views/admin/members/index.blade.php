@@ -8,30 +8,41 @@
                 <h1 class="page-title">Members</h1>
                 <p class="page-subtitle">Manage and view all church members</p>
             </div>
-            <a href="{{ route('admin.members.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle"></i> Add Member
-            </a>
+            <div class="header-actions-right">
+                <a href="{{ route('admin.members.create') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Add Member
+                </a>
+            </div>
         </div>
 
         {{-- FILTERS & SEARCH --}}
-        <div class="filter-bar">
+        <form method="GET" action="{{ route('admin.members.index') }}" class="filter-bar">
             <div class="search-box">
                 <i class="bi bi-search"></i>
-                <input type="text" placeholder="Search members..." class="filter-input">
+                <input type="search" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Search members..." class="filter-input">
             </div>
-            <select class="filter-select">
-                <option>All Status</option>
-                <option>Active</option>
-                <option>Inactive</option>
-                <option>Visitor</option>
+            <select name="status" class="filter-select" onchange="this.form.submit()">
+                <option value="">All Status</option>
+                @foreach ($statuses as $status)
+                    <option value="{{ $status }}" @selected(($filters['status'] ?? '') === $status)>{{ $status }}</option>
+                @endforeach
             </select>
-            <select class="filter-select">
-                <option>All Roles</option>
-                <option>Admin</option>
-                <option>Pastor</option>
-                <option>Member</option>
+            <select name="role" class="filter-select" onchange="this.form.submit()">
+                <option value="">All Roles</option>
+                @foreach ($roles as $role)
+                    <option value="{{ $role }}" @selected(($filters['role'] ?? '') === $role)>{{ $role }}</option>
+                @endforeach
             </select>
-        </div>
+            <select name="ministry" class="filter-select" onchange="this.form.submit()">
+                <option value="">All Ministries</option>
+                @foreach ($ministries as $ministry)
+                    <option value="{{ $ministry }}" @selected(($filters['ministry'] ?? '') === $ministry)>{{ $ministry }}</option>
+                @endforeach
+            </select>
+            @if (($filters['search'] ?? null) || ($filters['status'] ?? null) || ($filters['role'] ?? null) || ($filters['ministry'] ?? null))
+                <a href="{{ route('admin.members.index') }}" class="btn btn-secondary btn-filter">Clear</a>
+            @endif
+        </form>
 
         {{-- MEMBERS TABLE --}}
         <div class="table-wrapper">
@@ -42,6 +53,7 @@
                         <th>EMAIL</th>
                         <th>PHONE</th>
                         <th>ROLE</th>
+                        <th>MINISTRY</th>
                         <th>STATUS</th>
                         <th>JOINED</th>
                         <th>ACTIONS</th>
@@ -54,11 +66,18 @@
                             <span class="table-cell-name">{{ $member->name ?? ($member->first_name . ' ' . $member->last_name) }}</span>
                         </td>
                         <td>{{ $member->email ?? '-' }}</td>
-                        <td>{{ $member->contact_number ?? '-' }}</td>
+                        <td>{{ $member->phone ?? $member->contact_number ?? '-' }}</td>
                         <td>
-                            <span class="role-badge">
-                                {{ $member->memberStatus?->name ?? 'Member' }}
-                            </span>
+                            @forelse ($member->roles as $role)
+                                <span class="role-badge {{ Str::slug($role->name) }}">
+                                    {{ $role->name }}
+                                </span>
+                            @empty
+                                <span class="role-badge unassigned">No Role</span>
+                            @endforelse
+                        </td>
+                        <td>
+                            <span class="ministry-text">{{ $member->ministryNames() }}</span>
                         </td>
                         <td>
                             @php
@@ -96,7 +115,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" style="text-align: center; color: #999; padding: 40px;">
+                        <td colspan="8" style="text-align: center; color: #999; padding: 40px;">
                             <i class="bi bi-inbox" style="font-size: 32px; margin-bottom: 10px; display: block;"></i>
                             No members found
                         </td>
@@ -199,6 +218,10 @@
             cursor: pointer;
         }
 
+        .btn-filter {
+            min-height: 42px;
+        }
+
         /* LIGHT TABLE STYLING */
         .table-wrapper {
             overflow-x: auto;
@@ -206,6 +229,7 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             overflow: hidden;
+            min-height: calc(100vh - 260px);
         }
 
         .table-dark {
@@ -268,14 +292,28 @@
             font-weight: 600;
             background: #a0aec0;
             color: white;
+            margin: 2px 4px 2px 0;
         }
 
         .role-badge.admin {
             background: #667eea;
         }
 
+        .role-badge.pastor {
+            background: #f59e0b;
+        }
+
         .role-badge.member {
             background: #48bb78;
+        }
+
+        .role-badge.unassigned {
+            background: #94a3b8;
+        }
+
+        .ministry-text {
+            color: #6b7280;
+            font-size: 13px;
         }
 
         .status-indicator {

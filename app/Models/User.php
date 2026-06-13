@@ -64,7 +64,7 @@ class User extends Authenticatable
     {
         static::created(function ($user) {
             if ($user->getRoleNames()->isEmpty()) {
-                $user->assignRoles('Member');
+                $user->assignRole('Member');
             }
         });
     }
@@ -81,6 +81,13 @@ class User extends Authenticatable
     public function member()
     {
         return $this->belongsTo(Member::class);
+    }
+
+    public function ministryNames(): string
+    {
+        return $this->member?->ministries
+            ->pluck('name')
+            ->join(', ') ?: '-';
     }
 
     // ----------------------------------------------------

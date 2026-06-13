@@ -34,7 +34,11 @@ class LoginController extends Controller
                 description:    'User logged in: ' . Auth::user()->name 
             );
 
-            return redirect()->route('user.dashboard')
+            $dashboardRoute = Auth::user()->isAdmin()
+                ? 'admin.dashboard'
+                : 'user.dashboard';
+
+            return redirect()->route($dashboardRoute)
                 ->with('success', 'Welcome back!');
         }
 

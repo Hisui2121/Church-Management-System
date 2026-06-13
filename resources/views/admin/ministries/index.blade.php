@@ -18,9 +18,13 @@
             @foreach ($ministries as $ministry)
             <div class="ministry-card">
                 <div class="ministry-header">
-                    <h3 class="ministry-name">{{ $ministry->name }}</h3>
+                    <h3 class="ministry-name">
+                        <a href="{{ route('admin.ministries.show', $ministry) }}" class="ministry-link">
+                            {{ $ministry->name }}
+                        </a>
+                    </h3>
                     <div class="ministry-actions">
-                        <a href="{{ route('admin.ministries.edit', $ministry->id) }}" class="action-btn" title="Edit"><i class="bi bi-pencil"></i></a>
+                        <a href="{{ route('admin.ministries.show', $ministry) }}" class="action-btn" title="Assign Members"><i class="bi bi-person-plus"></i></a>
                         <form action="{{ route('admin.ministries.destroy', $ministry->id) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
@@ -28,10 +32,12 @@
                         </form>
                     </div>
                 </div>
-                <p class="ministry-description">{{ $ministry->description ?? 'No description' }}</p>
-                <div class="ministry-footer">
-                    <small class="ministry-date">Created: {{ $ministry->created_at->format('M d, Y') }}</small>
-                </div>
+                <a href="{{ route('admin.ministries.show', $ministry) }}" class="ministry-body-link">
+                    <p class="ministry-description">{{ $ministry->description ?? 'No description' }}</p>
+                    <div class="ministry-footer">
+                        <small class="ministry-date">Created: {{ $ministry->created_at->format('M d, Y') }}</small>
+                    </div>
+                </a>
             </div>
             @endforeach
         </div>
@@ -109,6 +115,20 @@
             color: var(--text-dark);
             margin: 0;
             flex: 1;
+        }
+
+        .ministry-link,
+        .ministry-body-link {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .ministry-link:hover {
+            color: var(--primary);
+        }
+
+        .ministry-body-link {
+            display: block;
         }
 
         .ministry-actions {

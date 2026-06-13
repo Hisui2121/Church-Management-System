@@ -15,15 +15,15 @@
         @if ($events->count() > 0)
         <div class="events-grid">
             @foreach ($events as $event)
-            <div class="event-card">
+            <div class="event-card" role="button" tabindex="0" data-title="{{ $event->name }}" data-description="{{ $event->description }}" onclick="openPreview(this)">
                 <div class="event-header">
                     <h3 class="event-name">{{ $event->name }}</h3>
                     <div class="event-actions">
-                        <a href="{{ route('admin.events.edit', $event->id) }}" class="action-btn" title="Edit"><i class="bi bi-pencil"></i></a>
+                        <a href="{{ route('admin.events.edit', $event->id) }}" class="action-btn" title="Edit" onclick="event.stopPropagation()"><i class="bi bi-pencil"></i></a>
                         <form action="{{ route('admin.events.destroy', $event->id) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="action-btn danger" title="Delete" onclick="return confirm('Are you sure you want to delete this event?')"><i class="bi bi-trash"></i></button>
+                            <button type="submit" class="action-btn danger" title="Delete" onclick="event.stopPropagation(); return confirm('Are you sure you want to delete this event?')"><i class="bi bi-trash"></i></button>
                         </form>
                     </div>
                 </div>
@@ -203,4 +203,39 @@
             }
         }
     </style>
+
+    <!-- Preview modal -->
+    <div id="previewModal" class="preview-modal" style="display:none">
+        <div class="preview-modal-backdrop" onclick="closePreview()"></div>
+        <div class="preview-modal-content" role="dialog" aria-modal="true">
+            <div class="preview-modal-header">
+                <h3 id="preview-title"></h3>
+                <button class="btn-close" onclick="closePreview()">&times;</button>
+            </div>
+            <div id="preview-body" class="preview-modal-body"></div>
+        </div>
+    </div>
+
+    <style>
+        .preview-modal { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 2000; }
+        .preview-modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.4); }
+        .preview-modal-content { position: relative; background: white; border-radius: 8px; max-width: 800px; width: 90%; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 2; }
+        .preview-modal-header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px }
+        .preview-modal-body { color: var(--text-dark); }
+        .btn-close { background: transparent; border: none; font-size: 24px; cursor: pointer }
+    </style>
+
+    <script>
+        function openPreview(el) {
+            var title = el.dataset.title || '';
+            var desc = el.dataset.description || '';
+            document.getElementById('preview-title').textContent = title;
+            document.getElementById('preview-body').innerHTML = desc || '<em>No description</em>';
+            document.getElementById('previewModal').style.display = 'flex';
+        }
+        function closePreview(){ document.getElementById('previewModal').style.display = 'none'; }
+
+        // prevent clicks on action buttons from opening the preview
+        document.querySelectorAll('.event-card .action-btn').forEach(function(btn){ btn.addEventListener('click', function(e){ e.stopPropagation(); }); });
+    </script>
 </x-admin-layout>

@@ -33,6 +33,11 @@
                 <dd class="detail-value">
                     @php
                         $actionLabels = [
+                            'Added'      => 'Add',
+                            'Created'    => 'Add',
+                            'Updated'    => 'Update',
+                            'Deleted'    => 'Delete',
+                            'added'      => 'Add',
                             'created'    => 'Add',
                             'updated'    => 'Update',
                             'deleted'    => 'Delete',
@@ -44,6 +49,11 @@
                         $actionLabel = $actionLabels[$auditLog->action] ?? ucfirst($auditLog->action);
                         
                         $actionBadges = [
+                            'Added'      => 'success',
+                            'Created'    => 'success',
+                            'Updated'    => 'warning',
+                            'Deleted'    => 'danger',
+                            'added'      => 'success',
                             'created'    => 'success',
                             'updated'    => 'warning',
                             'deleted'    => 'danger',

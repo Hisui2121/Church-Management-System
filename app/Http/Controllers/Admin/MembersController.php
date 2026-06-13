@@ -3,17 +3,57 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AuditLog;
+use App\Models\MemberStatus;
+use App\Models\Ministry;
+use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class MembersController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $members = \App\Models\User::with('memberStatus')->paginate(15);
+        $filters = $request->validate([
+            'search' => ['nullable', 'string', 'max:100'],
+            'status' => ['nullable', 'string', 'exists:member_statuses,name'],
+            'role' => ['nullable', 'string', 'exists:roles,name'],
+            'ministry' => ['nullable', 'string', 'exists:ministries,name'],
+        ]);
+
+        $members = User::with(['memberStatus', 'roles', 'member.ministries'])
+            ->when($filters['search'] ?? null, function ($query, string $search) {
+                $query->where(function ($subQuery) use ($search) {
+                    $subQuery->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%");
+                });
+            })
+            ->when($filters['status'] ?? null, function ($query, string $status) {
+                $query->whereHas('memberStatus', fn ($statusQuery) => $statusQuery->where('name', $status));
+            })
+            ->when($filters['role'] ?? null, function ($query, string $role) {
+                $query->whereHas('roles', fn ($roleQuery) => $roleQuery->where('name', $role));
+            })
+            ->when($filters['ministry'] ?? null, function ($query, string $ministry) {
+                $query->whereHas('member.ministries', fn ($ministryQuery) => $ministryQuery->where('name', $ministry));
+            })
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
+        $statuses = MemberStatus::orderBy('name')->pluck('name');
+        $roles = Role::orderBy('name')->pluck('name');
+        $ministries = Ministry::orderBy('name')->pluck('name');
+
         return view('admin.members.index', [
             'title' => 'Members',
             'members' => $members,
+            'statuses' => $statuses,
+            'roles' => $roles,
+            'ministries' => $ministries,
+            'filters' => $filters,
         ]);
     }
 
@@ -50,6 +90,8 @@ class MembersController extends Controller
         }
 
         $member = \App\Models\User::create($validated);
+        AuditLog::record('Created', 'users', $member->id, "Member '{$member->name}' created");
+
         return redirect()->route('admin.members.show', $member->id)->with('success', 'Member created successfully');
     }
 
@@ -99,6 +141,8 @@ class MembersController extends Controller
         }
 
         $member->update($validated);
+        AuditLog::record('Updated', 'users', $member->id, "Member '{$member->name}' updated");
+
         return redirect()->route('admin.members.show', $id)->with('success', 'Member updated successfully');
     }
 
@@ -107,6 +151,8 @@ class MembersController extends Controller
         $member = \App\Models\User::findOrFail($id);
         $memberName = $member->name;
         $member->delete();
+        AuditLog::record('Deleted', 'users', $id, "Member '{$memberName}' deleted");
+
         return redirect()->route('admin.members.index')->with('success', "Member \"$memberName\" deleted successfully");
     }
 }

@@ -2,34 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AuditLogIndexRequest;
 use App\Models\AuditLog;
-use Illuminate\Http\Request;
 
 class AuditLogController extends Controller
 {
     // Display audit log list
 
-    public function index(Request $request) 
+    public function index(AuditLogIndexRequest $request) 
     {
-        if (!auth()->user()->hasPermission('view_audit_logs')) {
-            abort(403, 'You do not have permissionto view audit logs.');
-        }
+        $filters = $request->validated();
 
         $query = AuditLog::with('user')->latest();
 
         //Filters by actions
-        if ($request->filled('action')) {
-            $query->where('action', $request->action);
+        if (!empty($filters['action'])) {
+            $query->whereIn('action', $filters['action']);
         }
 
         //Filters by table
-        if ($request->filled('table_name')) {
-            $query->where('table_name', $request->table_name);
+        if (!empty($filters['table_name'])) {
+            $query->whereIn('table_name', $filters['table_name']);
         }
 
         // Search 
-        if ($request->filled('search')) {
-            $search = $request->search;
+        if (!empty($filters['search'])) {
+            $search = $filters['search'];
             $query->where(function ($q) use ($search){
                 $q->where('description', 'like', "%{$search}%")
                   ->orWhereHas('user', fn($u) => $u->where('name', 'like', "%{$search}%"));
@@ -38,10 +36,12 @@ class AuditLogController extends Controller
 
         $logs = $query->paginate(20)->withQueryString();
 
-        $actions    = AuditLog::distinct()->pluck('action');
-        $tableNames = AuditLog::distinct()->pluck('table_name');
+        $actions    = AuditLog::distinct()->orderBy('action')->pluck('action')->toArray();
+        // ensure Created and Deleted are available in the filter even if not present yet
+        $actions = collect($actions)->merge(['Created','Deleted'])->unique()->sort()->values();
+        $tableNames = AuditLog::distinct()->orderBy('table_name')->pluck('table_name');
 
-        return view('audit_log.index', compact('logs', 'actions', 'tableNames'));
+        return view('audit_log.index', compact('logs', 'actions', 'tableNames', 'filters'));
     }
 
     //Show single log entry

@@ -37,11 +37,22 @@
                 </div>
             </div>
 
+            {{-- ATTENDANCE --}}
+            <div class="stat-card-heroes">
+                <div class="stat-card-icon">
+                    <i class="bi bi-calendar-check-fill"></i>
+                </div>
+                <div class="stat-card-content">
+                    <div class="stat-card-title">Attendance</div>
+                    <div class="stat-card-value">{{ $totalAttendance }} attendance records</div>
+                </div>
+            </div>
+
             {{-- GENERATE REPORT BUTTON --}}
             <div class="stat-card-button">
-                <button class="btn-generate-report">
+                <a href="{{ route('admin.members.report') }}" class="btn-generate-report">
                     <i class="bi bi-download"></i> Generate Report
-                </button>
+                </a>
             </div>
         </div>
 
@@ -58,9 +69,9 @@
                         </div>
                         <div class="card-header-actions">
                             <a href="{{ route('admin.members.index') }}" class="link-view-all">View all</a>
-                            <button class="btn-export">
+                            <a href="{{ route('admin.members.export') }}" class="btn-export">
                                 <i class="bi bi-download"></i> Export
-                            </button>
+                            </a>
                         </div>
                     </div>
 
@@ -96,10 +107,14 @@
                                         <span>{{ $member->name }}</span>
                                     </td>
                                     <td>
-                                        <span class="role-badge">Member</span>
+                                        @forelse ($member->roles as $role)
+                                            <span class="role-badge">{{ $role->name }}</span>
+                                        @empty
+                                            <span class="role-badge">No Role</span>
+                                        @endforelse
                                     </td>
                                     <td>
-                                        <span class="ministry-text">-</span>
+                                        <span class="ministry-text">{{ $member->ministryNames() }}</span>
                                     </td>
                                 </tr>
                                 @empty
@@ -174,8 +189,8 @@
         /* STAT CARDS */
         .dashboard-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 14px;
             margin-bottom: 30px;
         }
 
@@ -183,10 +198,11 @@
             background: white;
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 24px;
+            min-height: 118px;
+            padding: 18px 16px;
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 14px;
             transition: all 0.3s ease;
         }
 
@@ -196,15 +212,15 @@
         }
 
         .stat-card-icon {
-            width: 64px;
-            height: 64px;
+            width: 52px;
+            height: 52px;
             border-radius: 12px;
             background: var(--primary-light);
             color: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
+            font-size: 25px;
             flex-shrink: 0;
         }
 
@@ -213,23 +229,25 @@
         }
 
         .stat-card-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             color: var(--text-muted);
             margin-bottom: 4px;
         }
 
         .stat-card-value {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 700;
             color: var(--text-dark);
+            line-height: 1.3;
         }
 
         .stat-card-button {
             background: white;
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 24px;
+            min-height: 118px;
+            padding: 18px 16px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -239,9 +257,9 @@
             background: var(--primary);
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 12px 18px;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             display: flex;
@@ -261,6 +279,7 @@
             display: grid;
             grid-template-columns: 1fr 380px;
             gap: 30px;
+            align-items: stretch;
         }
 
         .dashboard-left-section {
@@ -279,10 +298,11 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             overflow: hidden;
+            min-height: 100%;
         }
 
         .card-header-heroes {
-            padding: 24px;
+            padding: 24px 30px;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
@@ -344,6 +364,7 @@
         /* TABLE STYLES */
         .table-wrapper-heroes {
             overflow-x: auto;
+            padding: 0 24px 24px;
         }
 
         .table-heroes {
@@ -357,7 +378,7 @@
         }
 
         .table-heroes thead th {
-            padding: 16px 24px;
+            padding: 16px 30px;
             text-align: left;
             font-size: 12px;
             font-weight: 600;
@@ -376,7 +397,7 @@
         }
 
         .table-heroes tbody td {
-            padding: 16px 24px;
+            padding: 18px 30px;
             font-size: 14px;
             color: var(--text-dark);
         }
@@ -446,28 +467,31 @@
         }
 
         .sidebar-header {
-            padding: 24px;
+            padding: 10px 16px;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 12px;
         }
 
         .sidebar-header > div {
             flex: 1;
+            min-width: 0;
         }
 
         .sidebar-header h3 {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             color: var(--text-dark);
-            margin: 0 0 4px 0;
+            margin: 0;
         }
 
         .sidebar-subtitle {
-            font-size: 12px;
+            font-size: 11px;
             color: #999;
             margin: 0;
+            line-height: 1.25;
         }
 
         .sidebar-content {
@@ -545,6 +569,10 @@
 
             .dashboard-stats {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stat-card-button {
+                grid-column: auto;
             }
         }
 

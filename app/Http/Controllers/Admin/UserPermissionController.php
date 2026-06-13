@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UpdateUserPermissionsRequest;
 use App\Models\AuditLog;
 use App\Models\User;
 use Spatie\Permission\Models\Permission;
-use Illuminate\Http\Request;
 
 class UserPermissionController extends Controller
 {
@@ -34,9 +34,9 @@ class UserPermissionController extends Controller
         return view('admin.member-statuses.edit', compact('user', 'available'));
     }
 
-    public function update(Request $request, User $user)
+    public function update(UpdateUserPermissionsRequest $request, User $user)
     {
-        $permissions = $request->input('permissions', []);
+        $permissions = $request->validated('permissions', []);
 
         $user->syncPermissions($permissions);
 

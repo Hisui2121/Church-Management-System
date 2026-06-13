@@ -49,80 +49,7 @@
 
 <body>
     <div class="admin-app-layout">
-        {{-- SIDEBAR --}}
-        <aside class="admin-sidebar" id="adminSidebar">
-            {{-- SIDEBAR TOP --}}
-            <div class="sidebar-top">
-                {{-- LOGO/ICON --}}
-                <div class="sidebar-brand" id="sidebarBrand">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" class="logo-img" id="brandLogo">
-                </div>
-
-                {{-- TOGGLE BUTTON --}}
-                <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
-                    <i class="bi bi-chevron-right"></i>
-                </button>
-            </div>
-
-            {{-- NAVIGATION MENU --}}
-            <nav class="admin-sidebar-menu">
-                {{-- MAIN MENU --}}
-                <div class="menu-section">
-                    <div class="section-label">MAIN MENU</div>
-
-                    <a href="{{ route('dashboard') }}" class="menu-item {{ request()->is('dashboard') ? 'active' : '' }}" title="Dashboard">
-                        <i class="bi bi-house-door-fill"></i>
-                        <span class="menu-text">Dashboard</span>
-                    </a>
-
-                    <a href="{{ route('admin.members.index') }}" class="menu-item {{ request()->is('admin/members*') ? 'active' : '' }}" title="Members">
-                        <i class="bi bi-people-fill"></i>
-                        <span class="menu-text">Members</span>
-                    </a>
-
-                    <a href="{{ route('admin.ministries.index') }}" class="menu-item {{ request()->is('admin/ministries*') ? 'active' : '' }}" title="Ministries">
-                        <i class="bi bi-heart-fill"></i>
-                        <span class="menu-text">Ministries</span>
-                    </a>
-
-                    <a href="{{ route('admin.events.index') }}" class="menu-item {{ request()->is('admin/events*') ? 'active' : '' }}" title="Events">
-                        <i class="bi bi-calendar-event-fill"></i>
-                        <span class="menu-text">Events</span>
-                    </a>
-
-                    <a href="{{ route('admin.announcements.index') }}" class="menu-item {{ request()->is('admin/announcements*') ? 'active' : '' }}" title="Announcements">
-                        <i class="bi bi-megaphone-fill"></i>
-                        <span class="menu-text">Announcements</span>
-                    </a>
-                </div>
-
-                {{-- SYSTEM MENU --}}
-                <div class="menu-section">
-                    <div class="section-label">SYSTEM</div>
-
-                    <a href="{{ route('audit_logs.index') }}" class="menu-item {{ request()->is('audit_logs*') ? 'active' : '' }}" title="Audit Trail">
-                        <i class="bi bi-journal-text"></i>
-                        <span class="menu-text">Audit Trail</span>
-                    </a>
-
-                    <a href="{{ route('admin.permissions.index') }}" class="menu-item {{ request()->is('admin/permissions*') ? 'active' : '' }}" title="Permissions">
-                        <i class="bi bi-shield-check-fill"></i>
-                        <span class="menu-text">Roles & Permission</span>
-                    </a>
-                </div>
-            </nav>
-
-            {{-- SIDEBAR BOTTOM --}}
-            <div class="sidebar-bottom">
-                <div class="user-profile-mini">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ auth()->user()->name }}" alt="Avatar" class="avatar-small">
-                    <div class="user-info-mini">
-                        <div class="user-name-mini">{{ auth()->user()->name }}</div>
-                        <div class="user-role-mini">{{ auth()->user()->roles->first()?->name ?? 'Admin' }}</div>
-                    </div>
-                </div>
-            </div>
-        </aside>
+        @include('admin.partials.sidebar')
 
         {{-- MAIN CONTENT WRAPPER --}}
         <div class="admin-main-wrapper">
@@ -148,7 +75,7 @@
                     {{-- USER MENU --}}
                     <div class="user-menu">
                         <button class="user-menu-btn" id="userMenuBtn">
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ auth()->user()->name }}" alt="Avatar" class="avatar">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ urlencode(auth()->user()->name) }}" alt="Avatar" class="avatar">
                             <span class="user-name-short">{{ substr(auth()->user()->name, 0, 1) }}</span>
                         </button>
 

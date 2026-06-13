@@ -6,6 +6,12 @@
 
 <div class="roles-page">
 
+    <div class="breadcrumb" style="margin-bottom:12px;">
+        <a href="{{ route('admin.members.index') }}">Members</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">User Permissions</span>
+    </div>
+
     <div class="page-header">
         <h1 class="page-title">
             <i class="bi bi-shield-check-fill me-2"></i> User Permissions

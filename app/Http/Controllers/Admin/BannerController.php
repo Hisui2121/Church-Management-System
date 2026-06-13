@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth; // <--- IDAGDAG MO ITO DITO
 
 class BannerController extends Controller
 {
@@ -38,7 +39,7 @@ class BannerController extends Controller
             $validated['image_path'] = $path;
         }
 
-        $validated['created_by'] = auth()->id();
+        $validated['created_by'] = Auth::id();
         $validated['is_active'] = $request->has('is_active');
 
         $banner = Banner::create($validated);
