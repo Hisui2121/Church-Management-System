@@ -277,6 +277,7 @@
         // Initialize first slide state
         if (slides.length > 0) { showSlide(0); }
     </script>
+    <style>
         .dashboard-stats { display: flex; gap: 16px; align-items: stretch; width: 100%; }
         .stat-card-heroes { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); flex: 1 1 0; min-width: 0; }
         .stat-card-title { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 4px; }

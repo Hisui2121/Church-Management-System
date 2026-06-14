@@ -35,7 +35,10 @@
                 $table->timestamps();
 
                 // Enforce one unique check-in per user per service session
-                $table->unique(['user_id', 'service_session_id'], 'user_session_unique');
+                $table->unique(
+                    ['member_id', 'service_session_id'],
+                    'member_session_unique'
+                );
             });
         }
 

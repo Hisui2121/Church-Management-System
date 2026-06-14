@@ -34,6 +34,15 @@ class AttendanceController extends Controller
         $currentYear = now()->year;
         $years = collect(range($currentYear - 5, $currentYear + 1));
 
+        $todayAttendanceCount = 0;
+
+        if ($activeSession) {
+            $todayAttendanceCount = Attendance::where(
+                'service_session_id',
+                $activeSession->id
+            )->count();
+        }
+
         return view('admin.attendance.index', [
             'title' => 'Attendance',
             'attendances' => $attendances,
@@ -42,6 +51,7 @@ class AttendanceController extends Controller
             'years' => $years,
             'month' => (int) $month,
             'year' => (int) $year,
+            'todayAttendanceCount' => $todayAttendanceCount
         ]);
     }
 
@@ -85,4 +95,86 @@ class AttendanceController extends Controller
 
         return redirect()->route('admin.attendance.index')->with('success', 'Attendance recorded successfully!');
     }
+    public function searchMembers(Request $request)
+    {
+        $keyword = $request->keyword;
+    
+        return Member::where('first_name', 'like', "%{$keyword}%")
+            ->orWhere('last_name', 'like', "%{$keyword}%")
+            ->limit(10)
+            ->get()
+            ->map(function ($member) {
+                return [
+                    'id' => $member->id,
+                    'full_name' =>
+                        $member->first_name . ' ' .
+                        $member->last_name,
+                ];
+            });
+    }
+    public function checkIn(Request $request)
+    {
+        $request->validate([
+            'member_id' => 'required|exists:members,id'
+        ]); 
+        $activeSession = ServiceSession::where(
+            'is_active',
+            true
+        )->first();
+    
+        if (!$activeSession) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No active session.'
+            ]);
+        }
+    
+        $exists = Attendance::where(
+            'member_id',
+            $request->member_id
+        )
+        ->where(
+            'service_session_id',
+            $activeSession->id
+        )
+        ->exists();
+    
+        if ($exists) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Already checked in.'
+            ]);
+        }
+    
+        Attendance::create([
+            'member_id' => $request->member_id,
+            'service_session_id' => $activeSession->id,
+            'date' => now()->toDateString(),
+            'checked_in_at' => now(),
+            'is_present' => true,
+            'recorded_by' => auth()->id()
+        ]);
+  
+        return response()->json([
+            'success' => true
+        ]);
+    }
+    public function dashboard()
+    {
+        $session = ServiceSession::active();
+
+        $presentCount =
+            Attendance::where(
+                'service_session_id',
+                $session->id
+            )->count();
+
+        return view(
+            'attendance.dashboard',
+            compact(
+                'presentCount'
+            )
+        );
+    }
+    
 }

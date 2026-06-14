@@ -148,6 +148,8 @@ Route::middleware(['auth', 'role:Admin'])
         Route::get('/announcements/{announcement}/edit',  [AnnouncementsController::class, 'edit'])->name('announcements.edit');
         Route::put('/announcements/{announcement}',       [AnnouncementsController::class, 'update'])->name('announcements.update');
         Route::delete('/announcements/{announcement}',    [AnnouncementsController::class, 'destroy'])->name('announcements.destroy');
+        Route::get('/attendance/search-members',[AttendanceController::class, 'searchMembers'])->name('attendance.search-members');
+        Route::post('/attendance/checkin',[AttendanceController::class, 'checkIn'] )->name('attendance.checkin');
 
         // Banners
         Route::get('/banners',               [BannerController::class, 'index'])->name('banners.index');
