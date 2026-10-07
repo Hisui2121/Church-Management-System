@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreMemberRequest;
+use App\Http\Requests\Admin\UpdateMemberRequest;
+use App\Models\Attendance;
 use App\Models\AuditLog;
 use App\Models\MemberStatus;
 use App\Models\Ministry;
@@ -64,32 +67,17 @@ class MembersController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreMemberRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'phone' => 'nullable|string',
-            'birthday' => 'nullable|date',
-            'sex' => 'nullable|string',
-            'street' => 'nullable|string',
-            'houseNo' => 'nullable|string',
-            'barangay' => 'nullable|string',
-            'city' => 'nullable|string',
-            'member_status' => 'nullable|string',
-            'member_type' => 'nullable|string',
-            'baptism_status' => 'nullable|string',
-            'baptism_date' => 'nullable|date',
-            'ministry_interest' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         if ($validated['member_status'] ?? null) {
-            $status = \App\Models\MemberStatus::where('name', $validated['member_status'])->first();
+            $status = MemberStatus::where('name', $validated['member_status'])->first();
             $validated['member_status_id'] = $status?->id;
             unset($validated['member_status']);
         }
 
-        $member = \App\Models\User::create($validated);
+        $member = User::create($validated);
         AuditLog::record('Created', 'users', $member->id, "Member '{$member->name}' created");
 
         return redirect()->route('admin.members.show', $member->id)->with('success', 'Member created successfully');
@@ -97,8 +85,8 @@ class MembersController extends Controller
 
     public function show($id): View
     {
-        $member = \App\Models\User::findOrFail($id);
-        $attendances = \App\Models\Attendance::where(function($q) use ($member) {
+        $member = User::findOrFail($id);
+        $attendances = Attendance::where(function($q) use ($member) {
             $q->where('member_id', $member->member?->id ?? 0)
               ->orWhere('user_id', $member->id);
         })->latest('date')->paginate(20);
@@ -112,36 +100,21 @@ class MembersController extends Controller
 
     public function edit($id): View
     {
-        $member = \App\Models\User::findOrFail($id);
+        $member = User::findOrFail($id);
         return view('admin.members.edit', [
             'title' => 'Edit Member',
             'member' => $member,
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateMemberRequest $request, $id)
     {
-        $member = \App\Models\User::findOrFail($id);
-        
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'phone' => 'nullable|string',
-            'birthday' => 'nullable|date',
-            'sex' => 'nullable|string',
-            'street' => 'nullable|string',
-            'houseNo' => 'nullable|string',
-            'barangay' => 'nullable|string',
-            'city' => 'nullable|string',
-            'member_status' => 'nullable|string',
-            'member_type' => 'nullable|string',
-            'baptism_status' => 'nullable|string',
-            'baptism_date' => 'nullable|date',
-            'ministry_interest' => 'nullable|string',
-        ]);
+        $member = User::findOrFail($id);
+
+        $validated = $request->validated();
 
         if ($validated['member_status'] ?? null) {
-            $status = \App\Models\MemberStatus::where('name', $validated['member_status'])->first();
+            $status = MemberStatus::where('name', $validated['member_status'])->first();
             $validated['member_status_id'] = $status?->id;
             unset($validated['member_status']);
         }
@@ -154,7 +127,7 @@ class MembersController extends Controller
 
     public function destroy($id)
     {
-        $member = \App\Models\User::findOrFail($id);
+        $member = User::findOrFail($id);
         $memberName = $member->name;
         $member->delete();
         AuditLog::record('Deleted', 'users', $id, "Member '{$memberName}' deleted");

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Member;
 use App\Models\AuditLog;
 use Carbon\Carbon;
 
@@ -151,18 +152,27 @@ class RegisterController extends Controller
             return redirect('/register/account');
         }
 
+        $nameParts = explode(' ', $data['name'], 2);
+
+        $member = Member::create([
+            'first_name' => $nameParts[0],
+            'last_name'  => $nameParts[1] ?? '',
+            'email'      => $data['email'],
+            'city'       => $data['city'],
+            'barangay'   => $data['barangay'],
+            'street'     => $data['street'],
+            'houseNo'    => $data['houseNo'] ?? null,
+            'birthdate'  => $data['birthday'] ?? null,
+            'gender'     => $data['sex'] ?? null,
+            'contact_number' => $data['phone'] ?? null,
+            'date_joined' => now(),
+        ]);
+
         $user = User::create([
             'name'      => $data['name'],
             'email'     => $data['email'],
             'password'  => $data['password'],
-        
-            'city'      => $data['city'],
-            'barangay'  => $data['barangay'],
-            'street'    => $data['street'],
-            'houseNo'   => $data['houseNo'] ?? null,
-            'birthday'  => $data['birthday'] ?? null,
-            'sex'       => $data['sex'] ?? null,
-            'phone'     => $data['phone'] ?? null,
+            'member_id' => $member->id,
         ]);
 
         $user->assignRole('Guest');

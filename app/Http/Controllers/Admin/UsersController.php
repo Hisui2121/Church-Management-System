@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreUserRequest;
+use App\Http\Requests\Admin\UpdateUserPasswordRequest;
+use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Models\User;
 use App\Models\Member;
 use App\Models\MemberStatus;
 use App\Models\AuditLog;
 use Spatie\Permission\Models\Role;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
@@ -38,15 +41,9 @@ class UsersController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $validated = $request->validate([
-            'name'              => 'required|string|max:255',
-            'email'             => 'required|string|email|max:255|unique:users',
-            'password'          => 'required|string|min:8|confirmed',
-            'role_name'         => 'required|exists:roles,name',
-            'member_status_id'  => 'nullable|exists:member_statuses,id',
-        ]);
+        $validated = $request->validated();
 
         $user = User::create([
             'name'              => $validated['name'],
@@ -100,14 +97,9 @@ class UsersController extends Controller
         ]);
     }
 
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $validated = $request->validate([
-            'name'              => 'required|string|max:255',
-            'email'             => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'role_name'         => 'required|exists:roles,name',
-            'member_status_id'  => 'nullable|exists:member_statuses,id',
-        ]);
+        $validated = $request->validated();
 
         $oldRoleName = $user->getRoleNames()->first() ?? 'Unknown';
 
@@ -151,11 +143,9 @@ class UsersController extends Controller
         ]);
     }
 
-    public function updatePassword(Request $request, User $user)
+    public function updatePassword(UpdateUserPasswordRequest $request, User $user)
     {
-        $validated = $request->validate([
-            'password' => 'required|string|min:8|confirmed',
-        ]);
+        $validated = $request->validated();
 
         $user->update([
             'password' => Hash::make($validated['password']),
@@ -170,7 +160,7 @@ class UsersController extends Controller
     public function destroy(User $user)
     {
         // Prevent deleting currently logged-in user
-        if (auth()->id() === $user->id) {
+        if (Auth::id() === $user->id) {
             return redirect()->route('admin.users.index')->with('error', 'You cannot delete your own account');
         }
 

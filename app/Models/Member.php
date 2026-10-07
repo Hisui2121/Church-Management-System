@@ -13,11 +13,16 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $contact_number
  * @property string|null $email
  * @property string|null $address
+ * @property string|null $street
+ * @property string|null $houseNo
+ * @property string|null $barangay
+ * @property string|null $city
  * @property string|null $profile_photo
  * @property int|null $member_status_id
  * @property int|null $member_type_id
- * @property int|null $baptism_id
- * @property int|null $family_group_id
+ * @property string|null $baptism_status
+ * @property string|null $baptism_date
+ * @property string|null $ministry_interest
  * @property string|null $date_joined
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -35,11 +40,16 @@ class Member extends Model
         'contact_number',
         'email',
         'address',
+        'street',
+        'houseNo',
+        'barangay',
+        'city',
         'profile_photo',
         'member_status_id',
         'member_type_id',
-        'baptism_id',
-        'family_group_id',
+        'baptism_status',
+        'baptism_date',
+        'ministry_interest',
         'date_joined',
     ];
 
@@ -69,6 +79,15 @@ class Member extends Model
     public function getFullNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    /**
+     * Alias so views can use $member->name, matching how the rest of the
+     * app refers to a person, without duplicating the value in storage.
+     */
+    public function getNameAttribute()
+    {
+        return $this->full_name;
     }
 
     public function memberType()
